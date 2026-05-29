@@ -1,0 +1,49 @@
+---
+import { profile } from "@/data/portfolio";
+---
+
+<section id="inicio" class="mx-auto grid min-h-[calc(100vh-73px)] max-w-6xl items-center gap-10 px-5 py-16 lg:grid-cols-[1.05fr_0.95fr]">
+  <div>
+    <p class="mb-5 inline-flex rounded-full border border-sky-300/25 bg-sky-300/10 px-3 py-1 text-sm font-medium text-sky-100">
+      {profile.availability}
+    </p>
+    <h1 class="max-w-3xl text-5xl font-black leading-[1.02] text-white sm:text-6xl lg:text-7xl">
+      {profile.headline}
+    </h1>
+    <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
+      {profile.summary}
+    </p>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a class="focus-ring rounded-md bg-sky-300 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-sky-200" href="#proyectos">
+        Ver proyectos
+      </a>
+      <a class="focus-ring rounded-md border border-white/15 px-5 py-3 text-sm font-bold text-white transition hover:border-white/35 hover:bg-white/5" href={`mailto:${profile.email}`}>
+        Contactar
+      </a>
+    </div>
+  </div>
+
+  <div class="relative min-h-[420px] overflow-hidden rounded-lg border border-white/10 bg-slate-950 shadow-2xl shadow-sky-950/30">
+    <div class="absolute inset-0 bg-[linear-gradient(115deg,rgba(14,165,233,0.24),transparent_38%,rgba(245,158,11,0.2))]"></div>
+    <div class="absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] [background-size:44px_44px]"></div>
+    <div class="absolute left-8 right-8 top-10 rounded-md border border-white/10 bg-black/35 p-4 backdrop-blur">
+      <div class="mb-4 flex gap-2">
+        <span class="size-2.5 rounded-full bg-red-300"></span>
+        <span class="size-2.5 rounded-full bg-amber-300"></span>
+        <span class="size-2.5 rounded-full bg-emerald-300"></span>
+      </div>
+      <div class="space-y-3 font-mono text-sm text-slate-300">
+        <p><span class="text-sky-300">const</span> portfolio = "personal";</p>
+        <p><span class="text-amber-300">ship</span>("clean", "fast", "useful");</p>
+        <p><span class="text-emerald-300">status</span>: ready_for_pages;</p>
+      </div>
+    </div>
+    <div class="absolute bottom-8 left-8 right-8 grid gap-3 sm:grid-cols-3">
+      {profile.links.map((link) => (
+        <a class="focus-ring rounded-md border border-white/10 bg-white/8 px-4 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/14" href={link.href}>
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
