@@ -1,75 +1,120 @@
 export const profile = {
-  name: "Alejandro Amaya",
-  role: "Desarrollador de software",
-  headline: "Construyo experiencias web claras, rapidas y mantenibles.",
+  name: "Jordan Amaya",
+  role: "Desarrollador de Videojuegos / Unity",
+  headline: "Desarrollo videojuegos, experiencias VR y aplicaciones interactivas con Unity.",
   summary:
-    "Portfolio base para presentar proyectos, stack tecnico y forma de contacto. Sustituye este texto por una propuesta personal mas concreta.",
+    "Me especializo en programacion con Unity, especialmente en gameplay, UI/UX, realidad virtual y publicacion multiplataforma. Disfruto leyendo documentacion, aprendiendo nuevas tecnologias y resolviendo problemas tecnicos dentro de equipos creativos.",
   location: "Madrid, Espana",
-  availability: "Disponible para nuevos proyectos",
-  email: "hello@example.com",
+  availability: "Desarrollador Unity abierto a oportunidades",
+  email: "jaamayac1@gmail.com",
   links: [
     { label: "GitHub", href: "https://github.com/JAAmaya" },
-    { label: "LinkedIn", href: "https://www.linkedin.com/" },
-    { label: "CV", href: "/cv.pdf" },
+    { label: "Itch.io", href: "https://jordanamaya.itch.io" },
+    { label: "Linktree", href: "https://linktr.ee/jordanamaya" },
   ],
 };
 
 export const navigation = [
-  { label: "Inicio", href: "#inicio" },
-  { label: "Skills", href: "#skills" },
-  { label: "Proyectos", href: "#proyectos" },
-  { label: "Contacto", href: "#contacto" },
+  { label: "Inicio", href: "/#inicio" },
+  { label: "Skills", href: "/#skills" },
+  { label: "Educacion", href: "/#educacion" },
+  { label: "Proyectos", href: "/proyectos" },
+  { label: "Contacto", href: "/#contacto" },
 ];
 
 export const skills = [
-  "Astro",
-  "TypeScript",
-  "JavaScript",
-  "Tailwind CSS",
-  "Node.js",
-  "GitHub Actions",
-  "APIs REST",
-  "Accesibilidad",
+  "Unity 2D",
+  "Unity 3D",
+  "Unity VR",
+  "C#",
+  "Computer Graphics",
+  "Realidad Virtual",
+  "UI/UX",
+  "Testing y bugfixing",
+  "WebGL",
+  "Android",
 ];
 
 export const credentials = [
   {
-    label: "Frontend",
-    value: "Interfaces responsive, rendimiento y sistemas de componentes.",
+    label: "Gameplay",
+    value: "Logica de juego, sistemas de guardado, dialogos, niveles e interaccion.",
   },
   {
-    label: "Backend",
-    value: "Servicios, integraciones y modelado de datos para producto.",
+    label: "VR y 3D",
+    value: "Aplicaciones educativas en realidad virtual, niveles e integracion de modelos 3D.",
   },
   {
-    label: "Entrega",
-    value: "Repos limpios, automatizacion y despliegues reproducibles.",
+    label: "Publicacion",
+    value: "Builds para WebGL, Android, Itch.io y Play Store con pruebas y depuracion.",
+  },
+];
+
+export const education = [
+  {
+    title: "Master's Degree in Computer Graphics, Games and Virtual Reality",
+    institution: "Universidad Rey Juan Carlos",
+    period: "Oct 2025 - Jun 2026",
+    description:
+      "Formacion especializada en graficos por computadora, videojuegos y realidad virtual.",
+    highlights: ["Computer Graphics", "Games", "Virtual Reality"],
+  },
+  {
+    title: "Grado en Diseno y Desarrollo de Videojuegos",
+    institution: "Universidad Rey Juan Carlos",
+    period: "Sep 2019 - May 2024",
+    description:
+      "Trabajo de Fin de Grado centrado en generacion procedural de niveles usando Wave Function Collapse.",
+    highlights: ["Unity", "Game Design", "Procedural Generation"],
   },
 ];
 
 export const projects = [
   {
-    title: "Proyecto destacado",
-    type: "Web app",
+    title: "El Gran Teatro del Mundo: El Juego",
+    type: "Aventura grafica 2D",
     description:
-      "Resumen breve del problema, la solucion y el impacto. Cambia este bloque por un proyecto real con metricas o contexto.",
-    stack: ["Astro", "TypeScript", "Tailwind"],
-    href: "https://github.com/JAAmaya",
+      "Aventura grafica 2D desarrollada para reinterpretar una obra clasica del siglo XVII. Trabajo en logica de juego, guardado, dialogos, niveles, UI/UX, testing y publicacion.",
+    stack: ["Unity", "C#", "WebGL", "Android"],
+    href: "https://jordanamaya.itch.io",
+    platform: "Itch.io / Play Store",
+    status: "Publicado",
   },
   {
-    title: "Producto interno",
-    type: "Herramienta",
+    title: "VIRION VR",
+    type: "Aplicaciones VR educativas",
     description:
-      "Describe una herramienta, automatizacion o integracion que demuestre criterio tecnico y capacidad de entrega.",
-    stack: ["Node.js", "APIs", "CI/CD"],
-    href: "https://github.com/JAAmaya",
+      "Cuatro aplicaciones de realidad virtual para un proyecto paneuropeo financiado por Erasmus+ orientado al uso de VR en materias STEM.",
+    stack: ["Unity VR", "C#", "UI/UX", "3D"],
+    href: "https://virion-project.eu",
+    platform: "VR",
+    status: "Proyecto profesional",
   },
   {
-    title: "Experiencia interactiva",
-    type: "Frontend",
+    title: "Prototipos y juegos independientes",
+    type: "Portfolio Itch.io",
     description:
-      "Espacio para un caso visual o interactivo. Incluye decisiones de diseno, restricciones y aprendizajes.",
-    stack: ["JavaScript", "UI", "Performance"],
-    href: "https://github.com/JAAmaya",
+      "Coleccion de proyectos personales e iteraciones jugables para experimentar con mecanicas, interfaces y publicacion web.",
+    stack: ["Unity", "C#", "Game Design"],
+    href: "https://jordanamaya.itch.io",
+    platform: "Itch.io",
+    status: "En crecimiento",
+  },
+];
+
+export const experience = [
+  {
+    role: "Desarrollador Unity",
+    company: "Desarrollo independiente para la Compania Nacional de Teatro Clasico",
+    period: "Jun 2024 - Presente",
+    description:
+      "Desarrollo de una aventura grafica 2D con soporte para WebGL y Android, incluyendo sistemas de juego, UI/UX, pruebas y publicacion.",
+  },
+  {
+    role: "Desarrollador VR en Unity",
+    company: "Premium Cine, Departamento VR",
+    period: "Oct 2023 - May 2024",
+    description:
+      "Desarrollo de aplicaciones VR educativas para VIRION: logica de juego, localizacion en 5 idiomas, niveles, integracion 3D y correccion de errores.",
   },
 ];
