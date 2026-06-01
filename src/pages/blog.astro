@@ -1,0 +1,9 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PlaceholderPage from "@/components/PlaceholderPage.astro";
+import { placeholders, profile } from "@/data/site";
+---
+
+<BaseLayout title={`Blog | ${profile.name}`} description={placeholders.en.blog.description} lang="en">
+  <PlaceholderPage lang="en" page="blog" active="blog" />
+</BaseLayout>

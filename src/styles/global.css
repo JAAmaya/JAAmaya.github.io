@@ -4,11 +4,26 @@
 
 :root {
   color-scheme: dark;
+  --color-bg: #070b12;
+  --color-bg-soft: #0d1422;
+  --color-surface: rgba(15, 23, 42, 0.74);
+  --color-surface-strong: rgba(2, 6, 23, 0.9);
+  --color-text: #e6edf6;
+  --color-muted: #9aa8ba;
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-primary: #7dd3fc;
+  --color-secondary: #f59e0b;
+  --color-green: #86efac;
+  --color-pink: #f0abfc;
+  --color-red: #fca5a5;
+  --radius-panel: 8px;
+  --transition-fast: 180ms ease;
+  --transition-page: 320ms ease;
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
-  background: #070b12;
-  color: #e6edf6;
+  background: var(--color-bg);
+  color: var(--color-text);
 }
 
 html {
@@ -21,7 +36,7 @@ body {
   background:
     radial-gradient(circle at top left, rgba(14, 165, 233, 0.18), transparent 34rem),
     radial-gradient(circle at top right, rgba(245, 158, 11, 0.12), transparent 28rem),
-    #070b12;
+    var(--color-bg);
 }
 
 ::selection {
@@ -34,5 +49,52 @@ body {
 }
 
 .focus-ring:focus-visible {
-  outline-color: #7dd3fc;
+  outline-color: var(--color-primary);
+}
+
+.theme-panel {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+}
+
+.project-panel {
+  display: none;
+}
+
+.project-panel[data-active="true"] {
+  display: grid;
+  animation: panel-in var(--transition-page);
+}
+
+.project-thumb[data-active="true"] {
+  filter: grayscale(0);
+  transform: translateY(-0.35rem) scale(1.12);
+  border-color: var(--color-primary);
+}
+
+.project-thumb:hover {
+  filter: grayscale(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+  }
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(1rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }

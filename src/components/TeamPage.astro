@@ -1,0 +1,39 @@
+---
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { team, type Lang } from "@/data/site";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const content = team[lang];
+---
+
+<Header lang={lang} active="team" />
+<main class="mx-auto max-w-6xl px-5 py-16">
+  <section class="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+    <div>
+      <p class="text-sm font-bold uppercase text-[var(--color-secondary)]">{content.eyebrow}</p>
+      <h1 class="mt-4 text-6xl font-black leading-tight text-white">{content.title}</h1>
+      <p class="mt-6 text-lg leading-8 text-slate-300">{content.description}</p>
+      <p class="mt-6 rounded-md border border-[var(--color-border)] bg-white/5 p-4 text-slate-300">{content.note}</p>
+    </div>
+    <div class="theme-panel p-6">
+      <div class="relative mb-6 aspect-video overflow-hidden rounded-md bg-gradient-to-br from-amber-300/35 via-slate-950 to-red-950">
+        <div class="absolute inset-0 opacity-35 [background-image:linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] [background-size:32px_32px]"></div>
+        <p class="absolute bottom-6 left-6 text-5xl font-black text-white">VF</p>
+      </div>
+      <div class="grid gap-4">
+        {content.facts.map((fact) => (
+          <div class="border-t border-[var(--color-border)] pt-4">
+            <p class="text-sm font-bold text-[var(--color-primary)]">{fact.label}</p>
+            <p class="mt-1 text-lg font-semibold text-white">{fact.value}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</main>
+<Footer lang={lang} />

@@ -1,0 +1,9 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import TeamPage from "@/components/TeamPage.astro";
+import { profile, team } from "@/data/site";
+---
+
+<BaseLayout title={`Equipo | ${profile.name}`} description={team.es.description} lang="es">
+  <TeamPage lang="es" />
+</BaseLayout>

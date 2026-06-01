@@ -1,0 +1,9 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PortfolioPage from "@/components/PortfolioPage.astro";
+import { labels, profile } from "@/data/site";
+---
+
+<BaseLayout title={`Portfolio | ${profile.name}`} description={labels.es.portfolioIntro} lang="es">
+  <PortfolioPage lang="es" />
+</BaseLayout>

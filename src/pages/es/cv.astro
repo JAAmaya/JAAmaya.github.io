@@ -1,0 +1,9 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import CvPage from "@/components/CvPage.astro";
+import { labels, profile } from "@/data/site";
+---
+
+<BaseLayout title={`CV | ${profile.name}`} description={labels.es.cvIntro} lang="es">
+  <CvPage lang="es" />
+</BaseLayout>

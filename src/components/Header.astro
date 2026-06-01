@@ -1,24 +1,63 @@
 ---
-import { navigation, profile } from "@/data/portfolio";
+import { navItems, profile, routeMap, type Lang, type RouteKey } from "@/data/site";
+
+interface Props {
+  lang: Lang;
+  active: RouteKey;
+}
+
+const { lang, active } = Astro.props;
+const otherLang = lang === "en" ? "es" : "en";
+const menuLabel = lang === "en" ? "Menu" : "Menú";
 ---
 
-<header class="sticky top-0 z-40 border-b border-white/10 bg-[#070b12]/85 backdrop-blur">
-  <nav class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4" aria-label="Principal">
-    <a class="focus-ring flex items-center gap-3 rounded-sm" href="/#inicio" aria-label="Ir al inicio">
+<header class="sticky top-0 z-40 border-b border-[var(--color-border)] bg-[color:rgba(7,11,18,0.88)] backdrop-blur">
+  <nav class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4" aria-label={lang === "en" ? "Main" : "Principal"}>
+    <a class="focus-ring flex items-center gap-3 rounded-sm" href={routeMap.home[lang]} aria-label={lang === "en" ? "Go home" : "Ir al inicio"}>
       <span class="grid size-9 place-items-center rounded-md bg-white text-sm font-black text-slate-950">JA</span>
       <span class="hidden text-sm font-semibold text-white sm:inline">{profile.name}</span>
     </a>
-    <div class="flex items-center gap-1 sm:gap-2">
-      {
-        navigation.map((item) => (
-          <a
-            class="focus-ring rounded-sm px-2.5 py-2 text-sm font-medium text-slate-300 transition hover:text-white sm:px-3"
-            href={item.href}
-          >
-            {item.label}
-          </a>
-        ))
-      }
+
+    <button
+      class="focus-ring rounded-md border border-[var(--color-border)] px-3 py-2 text-sm font-bold text-white md:hidden"
+      type="button"
+      data-menu-toggle
+      aria-expanded="false"
+      aria-controls="site-menu"
+    >
+      {menuLabel}
+    </button>
+
+    <div id="site-menu" class="absolute left-0 right-0 top-full hidden border-b border-[var(--color-border)] bg-[var(--color-bg)] px-5 py-4 md:static md:flex md:border-0 md:bg-transparent md:p-0" data-menu>
+      <div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-2">
+        {
+          navItems[lang].map((item) => (
+            <a
+              class:list={[
+                "focus-ring rounded-sm px-2.5 py-2 text-sm font-medium transition hover:text-white sm:px-3",
+                item.key === active ? "text-white" : "text-slate-300",
+              ]}
+              href={routeMap[item.key][lang]}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+        <a class="focus-ring mt-2 rounded-md border border-[var(--color-border)] px-3 py-2 text-sm font-black text-[var(--color-primary)] transition hover:bg-white/5 md:mt-0" href={routeMap[active][otherLang]}>
+          {otherLang.toUpperCase()}
+        </a>
+      </div>
     </div>
   </nav>
 </header>
+
+<script>
+  const toggle = document.querySelector("[data-menu-toggle]");
+  const menu = document.querySelector("[data-menu]");
+
+  toggle?.addEventListener("click", () => {
+    const isOpen = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!isOpen));
+    menu?.classList.toggle("hidden", isOpen);
+  });
+</script>

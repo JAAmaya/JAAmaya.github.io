@@ -4,7 +4,7 @@ Este repositorio parte de una limpieza completa del portfolio anterior y queda o
 
 ## Objetivo
 
-Construir una presencia profesional directa, con una primera pantalla fuerte y secciones faciles de mantener para explicar perfil, capacidades, trabajo destacado y contacto.
+Construir una web personal bilingue, con ingles por defecto y espanol bajo `/es`, donde el portfolio sea una parte central pero no el unico contenido.
 
 ## Datos personales
 
@@ -15,13 +15,14 @@ Construir una presencia profesional directa, con una primera pantalla fuerte y s
 ## Principios de diseno
 
 - Navegacion corta y persistente.
-- Hero con mensaje claro, disponibilidad y llamadas a la accion.
-- Bloques densos pero legibles para skills, herramientas y credenciales.
-- Seccion de educacion con lectura de CV para formacion principal, certificaciones y aprendizaje continuo.
-- Proyectos destacados con contexto, tecnologia y enlaces.
-- Pagina hija `/proyectos` con estructura de galeria para proyectos estilo Itch.io.
-- Contacto simple, sin formularios innecesarios al inicio.
+- Header fijo con navegacion a Home, Portfolio, CV, Team, Blog y Games.
+- Home como hub personal con accesos claros a las secciones.
+- Portfolio visual con dos carruseles: trabajo profesional y trabajo personal.
+- CV separado con experiencia, educacion, skills e idiomas.
+- Team para Vacaflama, rol CTO y Madrid in Game Start IN Up.
+- Blog y Games como placeholders publicos preparados para crecer.
 - Contenido propio, sin copiar textos, marcas, codigo ni assets externos.
+- Tema configurable mediante variables CSS.
 
 ## Stack
 
