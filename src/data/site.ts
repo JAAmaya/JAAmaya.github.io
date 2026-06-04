@@ -120,15 +120,14 @@ export const home: Localized<{
 
 export const cv = {
   skills: [
-    "Unity 2D",
-    "Unity 3D",
-    "Unity VR",
+    "Unity",
+    "VR",
     "C#",
     "Computer Graphics",
-    "Virtual Reality",
+    "3D Math",
+    "Physics",
     "UI/UX",
     "Testing",
-    "Bugfixing",
     "WebGL",
     "Android",
   ],
@@ -140,10 +139,11 @@ export const cv = {
     en: [
       {
         role: "Unity Developer",
-        company: "Independent development for Compañía Nacional de Teatro Clásico",
+        company: "Vacaflama Studio",
         period: "Jun 2024 - Present",
         description:
-          "Development of a 2D graphic adventure for WebGL and Android, including gameplay logic, save system, dialogue management, level handling, UI/UX, testing, debugging, and publishing.",
+          "Unity developer at Vacaflama Studio, working across gameplay systems, UI, tooling, publishing, and technical foundations for team projects. Published El Gran Teatro del Mundo: El Videojuego for WebGL and Android, and currently contributes to SUN BURN NITRO as part of the studio's technical team.",
+        links: [{ label: "El Gran Teatro del Mundo", href: "/portfolio#professional-gran-teatro" }],
       },
       {
         role: "VR Unity Developer",
@@ -151,15 +151,17 @@ export const cv = {
         period: "Oct 2023 - May 2024",
         description:
           "Four virtual reality applications for VIRION, a pan-European Erasmus+ project exploring VR as an educational tool for STEM subjects.",
+        links: [{ label: "VIRION Project", href: "/portfolio#professional-virion" }],
       },
     ],
     es: [
       {
         role: "Desarrollador Unity",
-        company: "Desarrollo independiente para la Compañía Nacional de Teatro Clásico",
+        company: "Vacaflama Studio",
         period: "Jun 2024 - Presente",
         description:
-          "Desarrollo de una aventura gráfica 2D para WebGL y Android, incluyendo lógica de juego, sistema de guardado, gestión de diálogos, manejo de niveles, UI/UX, pruebas, depuración y publicación.",
+          "Desarrollador Unity en Vacaflama Studio, trabajando en sistemas de gameplay, UI, herramientas, publicación y bases técnicas para proyectos del equipo. Publiqué El Gran Teatro del Mundo: El Videojuego para WebGL y Android, y actualmente contribuyo a SUN BURN NITRO dentro del equipo técnico del estudio.",
+        links: [{ label: "El Gran Teatro del Mundo", href: "/es/portfolio#professional-gran-teatro" }],
       },
       {
         role: "Desarrollador VR en Unity",
@@ -167,6 +169,7 @@ export const cv = {
         period: "Oct 2023 - May 2024",
         description:
           "Cuatro aplicaciones de realidad virtual para VIRION, un proyecto paneuropeo financiado por Erasmus+ que explora el uso de VR como herramienta educativa en materias STEM.",
+        links: [{ label: "VIRION Project", href: "/es/portfolio#professional-virion" }],
       },
     ],
   },
@@ -218,6 +221,7 @@ export type Project = {
   highlights: Localized<string[]>;
   stack: string[];
   links: Array<{ label: string; href?: string }>;
+  images?: Array<{ src: string; alt: Localized<string> }>;
   thumbLabel: string;
   visualTone: "blue" | "amber" | "green" | "pink" | "violet" | "red";
 };
@@ -251,7 +255,32 @@ export const portfolioProjects: Record<"professional" | "personal", Project[]> =
         ],
       },
       stack: ["Unity VR", "C#", "3D", "UI/UX"],
-      links: [{ label: "VIRION", href: "https://virion-project.eu" }, { label: "YouTube" }],
+      links: [
+        { label: "VIRION", href: "https://www.virion-project.eu/" },
+        { label: "Download", href: "https://www.virion-project.eu/virion-vr-app-download/" },
+        { label: "Physics video", href: "https://www.youtube.com/watch?v=ah5T3O1hQ4g" },
+        { label: "Biology video", href: "https://www.youtube.com/watch?v=WimLSQqzk3o" },
+        { label: "Math video", href: "https://www.youtube.com/watch?v=DBtGz0SxtCg" },
+        { label: "Chemistry video", href: "https://www.youtube.com/watch?v=ncSQR8kVEeo" },
+      ],
+      images: [
+        {
+          src: "/portfolio/virion/geometry-lab.png",
+          alt: { en: "VIRION geometry VR lab screenshot", es: "Captura del laboratorio VR de geometría de VIRION" },
+        },
+        {
+          src: "/portfolio/virion/biology.png",
+          alt: { en: "VIRION biology VR application screenshot", es: "Captura de la aplicación VR de biología de VIRION" },
+        },
+        {
+          src: "/portfolio/virion/physics.png",
+          alt: { en: "VIRION physics VR application screenshot", es: "Captura de la aplicación VR de física de VIRION" },
+        },
+        {
+          src: "/portfolio/virion/chemistry.png",
+          alt: { en: "VIRION chemistry VR application screenshot", es: "Captura de la aplicación VR de química de VIRION" },
+        },
+      ],
       thumbLabel: "VR",
       visualTone: "blue",
     },
@@ -285,6 +314,20 @@ export const portfolioProjects: Record<"professional" | "personal", Project[]> =
       },
       stack: ["Unity", "C#", "WebGL", "Android"],
       links: [{ label: "Itch.io", href: "https://cacharro-games.itch.io/el-gran-teatro" }, { label: "Play Store" }],
+      images: [
+        {
+          src: "/portfolio/gran-teatro/screenshot-1.jpg",
+          alt: { en: "El Gran Teatro del Mundo game scene", es: "Escena del juego El Gran Teatro del Mundo" },
+        },
+        {
+          src: "/portfolio/gran-teatro/screenshot-2.jpg",
+          alt: { en: "El Gran Teatro del Mundo dialogue scene", es: "Escena de diálogo de El Gran Teatro del Mundo" },
+        },
+        {
+          src: "/portfolio/gran-teatro/screenshot-3.jpg",
+          alt: { en: "El Gran Teatro del Mundo gameplay screenshot", es: "Captura de gameplay de El Gran Teatro del Mundo" },
+        },
+      ],
       thumbLabel: "GT",
       visualTone: "amber",
     },
@@ -318,6 +361,28 @@ export const portfolioProjects: Record<"professional" | "personal", Project[]> =
       links: [
         { label: "Drive material", href: "https://drive.google.com/drive/folders/1TJ0oOw-fx6WJXttSTwjsLxaFX2216tYm" },
         { label: "Team website" },
+      ],
+      images: [
+        {
+          src: "/portfolio/sun-burn-nitro/poster-1.png",
+          alt: { en: "SUN BURN NITRO poster art", es: "Cartel de SUN BURN NITRO" },
+        },
+        {
+          src: "/portfolio/sun-burn-nitro/image.png",
+          alt: { en: "SUN BURN NITRO promotional image", es: "Imagen promocional de SUN BURN NITRO" },
+        },
+        {
+          src: "/portfolio/sun-burn-nitro/screenshot-1.png",
+          alt: { en: "SUN BURN NITRO gameplay image", es: "Imagen de gameplay de SUN BURN NITRO" },
+        },
+        {
+          src: "/portfolio/sun-burn-nitro/screenshot-2.png",
+          alt: { en: "SUN BURN NITRO character lineup image", es: "Imagen de personajes de SUN BURN NITRO" },
+        },
+        {
+          src: "/portfolio/sun-burn-nitro/team-dossier.jpg",
+          alt: { en: "Vacaflama team dossier image", es: "Imagen de dossier del equipo Vacaflama" },
+        },
       ],
       thumbLabel: "SN",
       visualTone: "red",
@@ -359,8 +424,69 @@ export const portfolioProjects: Record<"professional" | "personal", Project[]> =
         { label: "Itch.io", href: "https://typtyp-studios.itch.io/mechanoccult" },
         { label: "GitHub", href: "https://github.com/typtypstudios/game" },
       ],
+      images: [
+        {
+          src: "/portfolio/mechanoccult/gameplay-1.png",
+          alt: { en: "Mechanoccult typing duel gameplay screenshot", es: "Captura de gameplay de duelo de mecanografía de Mechanoccult" },
+        },
+        {
+          src: "/portfolio/mechanoccult/gameplay-2.png",
+          alt: { en: "Mechanoccult card and spell gameplay screenshot", es: "Captura de gameplay con cartas y hechizos de Mechanoccult" },
+        },
+      ],
       thumbLabel: "MC",
       visualTone: "violet",
+    },
+    {
+      id: "gpu-marine-graphics-demo",
+      title: "GPU Marine Graphics Demo",
+      year: "2026",
+      context: { en: "University graphics project", es: "Proyecto universitario de informática gráfica" },
+      teamOrClient: "Universidad Rey Juan Carlos",
+      engine: "Unity URP",
+      type: { en: "Real-time graphics demo", es: "Demo gráfica en tiempo real" },
+      status: { en: "Academic work", es: "Trabajo académico" },
+      description: {
+        en: "A Unity URP technical demo focused on advanced graphics pipeline stages: adaptive ocean tessellation, displacement, procedural geometry and GPU-driven creature movement.",
+        es: "Demo técnica en Unity URP centrada en etapas avanzadas del cauce gráfico: teselación adaptativa de océano, displacement, geometría procedural y movimiento de criaturas en GPU.",
+      },
+      contributionTags: ["Shaders", "Rendering", "GPU Simulation", "Procedural Geometry", "Technical Art"],
+      highlights: {
+        en: [
+          "Implemented a URP ocean shader with adaptive tessellation, animated displacement, runtime wireframe, Fresnel, specular lighting and shoreline foam.",
+          "Generated seagulls and fish from point primitives through geometry shaders, including per-instance variation and animated wings or tails.",
+          "Built compute-shader movement using double buffering: GPU boids for seagulls and wave-aware vertical motion for fish.",
+          "Prepared a clean Unity delivery project with only the scenes and dependencies needed for the demo.",
+        ],
+        es: [
+          "Implementé un océano URP con teselación adaptativa, displacement animado, wireframe en runtime, Fresnel, especular y espuma de orilla.",
+          "Generé gaviotas y peces desde primitivas de puntos mediante geometry shaders, con variación por instancia y animación de alas o colas.",
+          "Desarrollé movimiento con compute shaders usando doble buffer: boids en GPU para gaviotas y movimiento vertical de peces sincronizado con las olas.",
+          "Preparé un proyecto Unity limpio con solo las escenas y dependencias necesarias para la demo.",
+        ],
+      },
+      stack: ["Unity", "URP", "HLSL", "C#", "Compute Shaders", "Tessellation"],
+      links: [{ label: "GitHub", href: "https://github.com/JAAmaya/gpu-marine-graphics-demo" }],
+      images: [
+        {
+          src: "/portfolio/gpu-marine-graphics-demo/vista-general.jpg",
+          alt: { en: "GPU Marine Graphics Demo general ocean scene", es: "Vista general de la escena marina de GPU Marine Graphics Demo" },
+        },
+        {
+          src: "/portfolio/gpu-marine-graphics-demo/dynamic-tessellation-detail.jpg",
+          alt: { en: "Adaptive tessellation detail in the ocean shader", es: "Detalle de teselación adaptativa en el shader de océano" },
+        },
+        {
+          src: "/portfolio/gpu-marine-graphics-demo/fish-detail.jpg",
+          alt: { en: "Procedural fish rendered in the marine demo", es: "Peces procedurales renderizados en la demo marina" },
+        },
+        {
+          src: "/portfolio/gpu-marine-graphics-demo/seagulls-detail.jpg",
+          alt: { en: "Procedural seagulls rendered in the marine demo", es: "Gaviotas procedurales renderizadas en la demo marina" },
+        },
+      ],
+      thumbLabel: "GPU",
+      visualTone: "blue",
     },
     {
       id: "darnos-tiempo",
@@ -390,6 +516,16 @@ export const portfolioProjects: Record<"professional" | "personal", Project[]> =
       },
       stack: ["Unity", "C#", "UI"],
       links: [{ label: "Itch.io", href: "https://jordanamaya.itch.io/darnos-tiempo" }],
+      images: [
+        {
+          src: "/portfolio/darnos-tiempo/screenshot-1.png",
+          alt: { en: "Darnos Tiempo 3D graphic adventure screenshot", es: "Captura de la aventura gráfica 3D Darnos Tiempo" },
+        },
+        {
+          src: "/portfolio/darnos-tiempo/screenshot-2.png",
+          alt: { en: "Darnos Tiempo gameplay screenshot", es: "Captura de gameplay de Darnos Tiempo" },
+        },
+      ],
       thumbLabel: "DT",
       visualTone: "green",
     },

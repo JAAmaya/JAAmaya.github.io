@@ -23,8 +23,8 @@ npm run preview
 - `src/components/`: secciones reutilizables.
 - `src/data/portfolio.ts`: contenido editable de skills, credenciales, proyectos y contacto.
 - `src/styles/global.css`: Tailwind y estilos base.
-- `.github/workflows/deploy.yml`: despliegue automatico a GitHub Pages desde `main`.
+- `.github/workflows/deploy.yml`: despliegue automático a GitHub Pages desde `main`.
 
-## Personalizacion inicial
+## Personalización inicial
 
-Edita `src/data/portfolio.ts` para sustituir placeholders por tu contenido real, enlaces, proyectos y forma de contacto.
+Edita `src/data/site.ts` para sustituir placeholders por tu contenido real, enlaces, proyectos y forma de contacto.

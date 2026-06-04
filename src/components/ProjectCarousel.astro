@@ -30,13 +30,35 @@ const toneClass = {
 
   <div class="relative overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-strong)]">
     {projects.map((project, index) => (
-      <article class="project-panel gap-0 lg:grid-cols-[1.08fr_0.92fr]" data-panel data-index={index} data-active={index === 0 ? "true" : "false"}>
+      <article id={`${id}-${project.id}`} class="project-panel scroll-mt-24 gap-0 lg:grid-cols-[1.08fr_0.92fr]" data-panel data-index={index} data-active={index === 0 ? "true" : "false"}>
         <div class={`relative min-h-[330px] overflow-hidden bg-gradient-to-br ${toneClass[project.visualTone]} lg:min-h-[560px]`}>
-          <div class="absolute inset-0 opacity-35 [background-image:linear-gradient(rgba(255,255,255,.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.1)_1px,transparent_1px)] [background-size:36px_36px]"></div>
+          {project.images?.length ? (
+            <>
+              <img
+                class="absolute inset-0 size-full object-cover"
+                src={project.images[0].src}
+                alt={project.images[0].alt[lang]}
+                loading={index === 0 ? "eager" : "lazy"}
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-slate-950/15"></div>
+              <div class="absolute inset-x-4 bottom-4 flex gap-2 sm:inset-x-8 sm:bottom-8">
+                {project.images.slice(1, 5).map((image) => (
+                  <img
+                    class="h-16 min-w-0 flex-1 rounded-md border border-white/20 object-cover shadow-lg sm:h-24"
+                    src={image.src}
+                    alt={image.alt[lang]}
+                    loading="lazy"
+                  />
+                ))}
+              </div>
+            </>
+          ) : (
+            <div class="absolute inset-0 opacity-35 [background-image:linear-gradient(rgba(255,255,255,.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.1)_1px,transparent_1px)] [background-size:36px_36px]"></div>
+          )}
           <div class="absolute inset-x-8 top-8 rounded-md border border-white/10 bg-black/35 p-4 backdrop-blur">
             <p class="font-mono text-sm text-slate-300">{project.type[lang]}</p>
           </div>
-          <div class="absolute bottom-8 left-8 right-8">
+          <div class={`absolute left-8 right-8 ${project.images?.length ? "bottom-28 sm:bottom-40" : "bottom-8"}`}>
             <p class="text-sm font-black uppercase text-white/70">{project.status[lang]}</p>
             <p class="mt-2 text-5xl font-black text-white">{project.thumbLabel}</p>
           </div>
@@ -146,5 +168,13 @@ const toneClass = {
         }
       });
     });
+
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+      const targetPanel = panels.find((panel) => panel.id === hash);
+      if (targetPanel?.dataset.index) {
+        setActive(Number(targetPanel.dataset.index));
+      }
+    }
   });
 </script>
