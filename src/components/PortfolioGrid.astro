@@ -20,6 +20,8 @@ const detailPath = (slug: string) => (lang === "en" ? `/portfolio/${slug}` : `/e
 const detailCta = lang === "en" ? "View project" : "Ver proyecto";
 const modalCta = lang === "en" ? "Quick view" : "Vista rápida";
 const closeLabel = lang === "en" ? "Close" : "Cerrar";
+const shareLabel = lang === "en" ? "Copy link" : "Copiar enlace";
+const shareCopiedLabel = lang === "en" ? "Copied" : "Copiado";
 const externalLabel = lang === "en" ? "External links" : "Enlaces externos";
 const stackLabel = lang === "en" ? "Stack" : "Stack";
 const contributionLabel = lang === "en" ? "Contribution" : "Contribución";
@@ -106,9 +108,14 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
     <div class="max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-strong)] shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
       <div class="flex items-center justify-between gap-4 border-b border-[var(--color-border)] p-4">
         <p class="text-sm font-black uppercase tracking-wide text-[var(--color-secondary)]" data-modal-status></p>
-        <button class="focus-ring rounded-md border border-[var(--color-border)] px-3 py-2 text-sm font-black text-white transition hover:bg-white/5" type="button" data-modal-close>
-          {closeLabel}
-        </button>
+        <div class="flex items-center gap-2">
+          <button class="focus-ring rounded-md border border-[var(--color-border)] px-3 py-2 text-sm font-black text-white transition hover:bg-white/5" type="button" data-modal-share>
+            {shareLabel}
+          </button>
+          <button class="focus-ring rounded-md border border-[var(--color-border)] px-3 py-2 text-sm font-black text-white transition hover:bg-white/5" type="button" data-modal-close>
+            {closeLabel}
+          </button>
+        </div>
       </div>
       <div class="grid gap-0 lg:grid-cols-[1fr_0.72fr]">
         <div class="relative min-h-[260px] overflow-hidden bg-slate-900">
@@ -168,6 +175,7 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
     images: project.images?.map((image) => ({ src: image.src, alt: image.alt[lang] })) ?? [],
     thumbLabel: project.thumbLabel,
   })))} />
+  <script is:inline type="application/json" data-project-modal-labels set:html={JSON.stringify({ shareLabel, shareCopiedLabel })} />
 </section>
 
 <script>
@@ -178,10 +186,39 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
     const cards = Array.from(grid.querySelectorAll<HTMLElement>("[data-project-card]"));
     const modal = grid.querySelector<HTMLElement>("[data-project-modal]");
     const modalDataElement = grid.querySelector<HTMLScriptElement>("[data-project-modal-data]");
+    const modalLabelsElement = grid.querySelector<HTMLScriptElement>("[data-project-modal-labels]");
     const projects = JSON.parse(modalDataElement?.textContent || "[]");
+    const labels = JSON.parse(modalLabelsElement?.textContent || "{}");
     let lastFocused: HTMLElement | null = null;
     let activeModalProject: any = null;
     let activeModalImageIndex = 0;
+    let shouldRestoreUrlOnClose = true;
+
+    const getUrlProjectId = () => {
+      const params = new URLSearchParams(window.location.search);
+      const queryProject = params.get("project");
+      if (queryProject) return queryProject;
+      return window.location.hash.startsWith("#project=") ? window.location.hash.replace("#project=", "") : "";
+    };
+
+    const getProjectUrl = (projectId: string) => {
+      const url = new URL(window.location.href);
+      url.searchParams.set("project", projectId);
+      url.hash = "";
+      return url;
+    };
+
+    const setProjectUrl = (projectId: string) => {
+      window.history.pushState({ projectId }, "", getProjectUrl(projectId));
+    };
+
+    const clearProjectUrl = () => {
+      const url = new URL(window.location.href);
+      if (!url.searchParams.has("project") && !url.hash.startsWith("#project=")) return;
+      url.searchParams.delete("project");
+      url.hash = "";
+      window.history.pushState({}, "", url);
+    };
 
     const setFilter = (filter: string) => {
       filterButtons.forEach((button) => {
@@ -211,7 +248,11 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
       modal.classList.remove("flex");
       modal.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
-      lastFocused?.focus();
+      activeModalProject = null;
+      activeModalImageIndex = 0;
+      if (shouldRestoreUrlOnClose) clearProjectUrl();
+      lastFocused?.blur();
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     };
 
     const renderModalImage = () => {
@@ -251,21 +292,24 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
       renderModalImage();
     };
 
-    const openModal = (projectId: string, trigger: HTMLElement) => {
+    const openModal = (projectId: string, trigger?: HTMLElement, options: { updateUrl?: boolean } = {}) => {
       const project = projects.find((item: any) => item.id === projectId);
       if (!project || !modal) return;
-      lastFocused = trigger;
+      lastFocused = trigger ?? null;
       activeModalProject = project;
       activeModalImageIndex = 0;
+      shouldRestoreUrlOnClose = true;
 
       const links = modal.querySelector("[data-modal-links]");
       const highlights = modal.querySelector("[data-modal-highlights]");
+      const shareButton = modal.querySelector<HTMLButtonElement>("[data-modal-share]");
 
       modal.querySelector("[data-modal-status]")!.textContent = project.status;
       modal.querySelector("[data-modal-meta]")!.textContent = `${project.year} · ${project.type} · ${project.engine}`;
       modal.querySelector("[data-modal-title]")!.textContent = project.title;
       modal.querySelector("[data-modal-role]")!.textContent = project.role;
       modal.querySelector("[data-modal-thumb]")!.textContent = project.thumbLabel;
+      if (shareButton) shareButton.textContent = labels.shareLabel || "Copy link";
       renderModalImage();
 
       fillList(modal.querySelector("[data-modal-tags]"), project.tags, "rounded bg-sky-300/10 px-2.5 py-1 text-xs font-bold text-sky-100");
@@ -302,6 +346,7 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
       modal.classList.add("flex");
       modal.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
+      if (options.updateUrl !== false) setProjectUrl(project.id);
       modal.querySelector<HTMLButtonElement>("[data-modal-close]")?.focus();
     };
 
@@ -314,6 +359,20 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
     });
 
     modal?.querySelector("[data-modal-close]")?.addEventListener("click", closeModal);
+    modal?.querySelector<HTMLButtonElement>("[data-modal-share]")?.addEventListener("click", async (event) => {
+      if (!activeModalProject) return;
+      const button = event.currentTarget as HTMLButtonElement;
+      const url = getProjectUrl(activeModalProject.id).toString();
+      try {
+        await navigator.clipboard.writeText(url);
+        button.textContent = labels.shareCopiedLabel || "Copied";
+        window.setTimeout(() => {
+          button.textContent = labels.shareLabel || "Copy link";
+        }, 1400);
+      } catch {
+        window.prompt(labels.shareLabel || "Copy link", url);
+      }
+    });
     modal?.querySelector("[data-modal-prev]")?.addEventListener("click", () => moveModalImage(-1));
     modal?.querySelector("[data-modal-next]")?.addEventListener("click", () => moveModalImage(1));
     modal?.querySelector("[data-modal-image-button]")?.addEventListener("click", () => moveModalImage(1));
@@ -326,5 +385,19 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
       if (event.key === "ArrowLeft") moveModalImage(-1);
       if (event.key === "ArrowRight") moveModalImage(1);
     });
+
+    window.addEventListener("popstate", () => {
+      const projectId = getUrlProjectId();
+      if (projectId) {
+        openModal(projectId, undefined, { updateUrl: false });
+        return;
+      }
+      shouldRestoreUrlOnClose = false;
+      closeModal();
+      shouldRestoreUrlOnClose = true;
+    });
+
+    const initialProjectId = getUrlProjectId();
+    if (initialProjectId) openModal(initialProjectId, undefined, { updateUrl: false });
   });
 </script>
