@@ -1,0 +1,18 @@
+---
+import ProjectDetailPage from "@/components/ProjectDetailPage.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { detailPortfolioProjects, profile } from "@/data/site";
+
+export function getStaticPaths() {
+  return detailPortfolioProjects.map((project) => ({
+    params: { slug: project.detailSlug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+---
+
+<BaseLayout title={`${project.title} | ${profile.name}`} description={project.description.en} lang="en">
+  <ProjectDetailPage project={project} lang="en" />
+</BaseLayout>

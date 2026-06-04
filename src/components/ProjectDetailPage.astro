@@ -1,0 +1,193 @@
+---
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import type { Lang, Project } from "@/data/site";
+
+type ProjectWithGroup = Project & { group: "professional" | "personal" };
+
+interface Props {
+  project: ProjectWithGroup;
+  lang: Lang;
+}
+
+const { project, lang } = Astro.props;
+const backHref = lang === "en" ? "/portfolio" : "/es/portfolio";
+const heroImage = project.images?.[0];
+const galleryImages = project.images ?? [];
+const facts = [
+  { label: lang === "en" ? "Year" : "Año", value: project.year },
+  { label: lang === "en" ? "Role" : "Rol", value: project.detailRole?.[lang] ?? project.context[lang] },
+  { label: lang === "en" ? "Team / Client" : "Equipo / Cliente", value: project.teamOrClient },
+  { label: lang === "en" ? "Engine" : "Motor", value: project.engine },
+  { label: lang === "en" ? "Status" : "Estado", value: project.status[lang] },
+  { label: lang === "en" ? "Type" : "Tipo", value: project.type[lang] },
+];
+---
+
+<Header lang={lang} active="portfolio" />
+<main>
+  <section class="relative min-h-[72vh] overflow-hidden">
+    {heroImage ? (
+      <img class="absolute inset-0 size-full object-cover" src={heroImage.src} alt={heroImage.alt[lang]} />
+    ) : (
+      <div class="absolute inset-0 bg-gradient-to-br from-sky-400/30 via-slate-950 to-blue-950"></div>
+    )}
+    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/20"></div>
+    <div class="relative mx-auto flex min-h-[72vh] max-w-6xl flex-col justify-end px-5 py-16">
+      <a class="focus-ring mb-8 w-fit rounded-md border border-white/20 bg-black/35 px-4 py-3 text-sm font-black text-white backdrop-blur transition hover:bg-white/10" href={backHref}>
+        {lang === "en" ? "Back to portfolio" : "Volver al portfolio"}
+      </a>
+      <p class="text-sm font-black uppercase tracking-wide text-[var(--color-secondary)]">{project.status[lang]}</p>
+      <h1 class="mt-4 max-w-4xl text-5xl font-black leading-tight text-white sm:text-6xl">{project.title}</h1>
+      <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-200">{project.description[lang]}</p>
+    </div>
+  </section>
+
+  <section class="mx-auto grid max-w-6xl gap-8 px-5 py-16 lg:grid-cols-[1fr_0.38fr]">
+    <div class="space-y-12">
+      {galleryImages.length ? (
+        <div>
+          <h2 class="text-3xl font-black text-white">{lang === "en" ? "Gallery" : "Galería"}</h2>
+          <div class="mt-6 grid gap-4 sm:grid-cols-2">
+            {galleryImages.map((image, index) => (
+              <button class="focus-ring overflow-hidden rounded-lg border border-[var(--color-border)] text-left transition hover:border-sky-300/60" type="button" data-lightbox-open={index}>
+                <img class="aspect-video w-full object-cover transition duration-300 hover:scale-105" src={image.src} alt={image.alt[lang]} loading="lazy" />
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      <div>
+        <h2 class="text-3xl font-black text-white">{lang === "en" ? "My Contribution" : "Mi contribución"}</h2>
+        <p class="mt-5 max-w-3xl leading-8 text-slate-300">{project.roleSummary?.[lang] ?? project.description[lang]}</p>
+        <ul class="mt-6 grid gap-4 text-slate-300">
+          {project.highlights[lang].map((item) => (
+            <li class="theme-panel flex gap-4 p-4">
+              <span class="mt-2 size-2 shrink-0 rounded-full bg-[var(--color-primary)]"></span>
+              <span class="leading-7">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <aside class="space-y-6">
+      <div class="theme-panel p-5">
+        <h2 class="text-xl font-black text-white">{lang === "en" ? "Project Information" : "Información del proyecto"}</h2>
+        <dl class="mt-5 space-y-4">
+          {facts.map((fact) => (
+            <div>
+              <dt class="text-xs font-black uppercase tracking-wide text-slate-500">{fact.label}</dt>
+              <dd class="mt-1 text-sm font-semibold leading-6 text-slate-200">{fact.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      <div class="theme-panel p-5">
+        <h2 class="text-xl font-black text-white">Stack</h2>
+        <div class="mt-5 flex flex-wrap gap-2">
+          {project.stack.map((item) => (
+            <span class="rounded bg-white/7 px-2.5 py-1 text-xs font-bold text-slate-200">{item}</span>
+          ))}
+        </div>
+      </div>
+
+      <div class="theme-panel p-5">
+        <h2 class="text-xl font-black text-white">{lang === "en" ? "Links" : "Enlaces"}</h2>
+        <div class="mt-5 flex flex-col gap-3">
+          {project.links.map((link) => (
+            link.href ? (
+              <a class="focus-ring rounded-md bg-white px-4 py-3 text-sm font-black text-slate-950 transition hover:bg-sky-100" href={link.href} target="_blank" rel="noreferrer">
+                {link.label}
+              </a>
+            ) : (
+              <span class="rounded-md border border-[var(--color-border)] px-4 py-3 text-sm font-black text-slate-500">
+                {link.label}
+              </span>
+            )
+          ))}
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <div class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/90 p-4 backdrop-blur" data-lightbox aria-hidden="true">
+    <button class="focus-ring absolute right-4 top-4 rounded-md border border-white/20 bg-black/40 px-4 py-3 text-sm font-black text-white backdrop-blur transition hover:bg-white/10" type="button" data-lightbox-close>
+      {lang === "en" ? "Close" : "Cerrar"}
+    </button>
+    <button class="focus-ring absolute left-4 top-1/2 grid size-12 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-black/45 text-3xl font-black text-white backdrop-blur transition hover:bg-white/10" type="button" data-lightbox-prev aria-label={lang === "en" ? "Previous image" : "Imagen anterior"}>
+      ←
+    </button>
+    <img class="max-h-[82vh] max-w-[88vw] rounded-lg object-contain shadow-2xl" src="" alt="" data-lightbox-image />
+    <button class="focus-ring absolute right-4 top-1/2 grid size-12 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-black/45 text-3xl font-black text-white backdrop-blur transition hover:bg-white/10" type="button" data-lightbox-next aria-label={lang === "en" ? "Next image" : "Imagen siguiente"}>
+      →
+    </button>
+    <p class="absolute bottom-4 left-4 right-4 text-center text-sm font-semibold text-slate-300" data-lightbox-caption></p>
+  </div>
+
+  <script is:inline type="application/json" data-lightbox-data set:html={JSON.stringify(galleryImages.map((image) => ({ src: image.src, alt: image.alt[lang] })))} />
+</main>
+<Footer lang={lang} />
+
+<script>
+  const lightbox = document.querySelector<HTMLElement>("[data-lightbox]");
+  const lightboxImage = document.querySelector<HTMLImageElement>("[data-lightbox-image]");
+  const lightboxCaption = document.querySelector<HTMLElement>("[data-lightbox-caption]");
+  const lightboxDataElement = document.querySelector<HTMLScriptElement>("[data-lightbox-data]");
+  const lightboxImages = JSON.parse(lightboxDataElement?.textContent || "[]");
+  let lightboxIndex = 0;
+  let lightboxLastFocus: HTMLElement | null = null;
+
+  const renderLightbox = () => {
+    const image = lightboxImages[lightboxIndex];
+    if (!image || !lightboxImage || !lightboxCaption) return;
+    lightboxImage.src = image.src;
+    lightboxImage.alt = image.alt;
+    lightboxCaption.textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`;
+  };
+
+  const openLightbox = (index: number, trigger: HTMLElement) => {
+    if (!lightbox || !lightboxImages.length) return;
+    lightboxLastFocus = trigger;
+    lightboxIndex = index;
+    renderLightbox();
+    lightbox.classList.remove("hidden");
+    lightbox.classList.add("flex");
+    lightbox.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    lightbox.querySelector<HTMLButtonElement>("[data-lightbox-close]")?.focus();
+  };
+
+  const closeLightbox = () => {
+    if (!lightbox) return;
+    lightbox.classList.add("hidden");
+    lightbox.classList.remove("flex");
+    lightbox.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    lightboxLastFocus?.focus();
+  };
+
+  const moveLightbox = (step: number) => {
+    if (!lightboxImages.length) return;
+    lightboxIndex = (lightboxIndex + step + lightboxImages.length) % lightboxImages.length;
+    renderLightbox();
+  };
+
+  document.querySelectorAll<HTMLButtonElement>("[data-lightbox-open]").forEach((button) => {
+    button.addEventListener("click", () => openLightbox(Number(button.dataset.lightboxOpen || 0), button));
+  });
+  lightbox?.querySelector("[data-lightbox-close]")?.addEventListener("click", closeLightbox);
+  lightbox?.querySelector("[data-lightbox-prev]")?.addEventListener("click", () => moveLightbox(-1));
+  lightbox?.querySelector("[data-lightbox-next]")?.addEventListener("click", () => moveLightbox(1));
+  lightbox?.addEventListener("click", (event) => {
+    if (event.target === lightbox) closeLightbox();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (lightbox?.getAttribute("aria-hidden") !== "false") return;
+    if (event.key === "Escape") closeLightbox();
+    if (event.key === "ArrowLeft") moveLightbox(-1);
+    if (event.key === "ArrowRight") moveLightbox(1);
+  });
+</script>

@@ -1,0 +1,330 @@
+﻿---
+import { allPortfolioProjects, type Lang } from "@/data/site";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const filters = [
+  { key: "all", label: { en: "All", es: "Todo" } },
+  { key: "professional", label: { en: "Professional", es: "Profesional" } },
+  { key: "personal", label: { en: "Personal", es: "Personal" } },
+  { key: "vr", label: { en: "VR", es: "VR" } },
+  { key: "games", label: { en: "Games", es: "Juegos" } },
+  { key: "technical", label: { en: "Technical / Graphics", es: "Técnico / Gráficos" } },
+];
+
+const detailPath = (slug: string) => (lang === "en" ? `/portfolio/${slug}` : `/es/portfolio/${slug}`);
+const detailCta = lang === "en" ? "View project" : "Ver proyecto";
+const modalCta = lang === "en" ? "Quick view" : "Vista rápida";
+const closeLabel = lang === "en" ? "Close" : "Cerrar";
+const externalLabel = lang === "en" ? "External links" : "Enlaces externos";
+const stackLabel = lang === "en" ? "Stack" : "Stack";
+const contributionLabel = lang === "en" ? "Contribution" : "Contribución";
+const fallbackImageAlt = { en: "Project visual placeholder", es: "Placeholder visual del proyecto" };
+const visibleProjects = allPortfolioProjects.filter((project) => !project.hiddenFromPortfolio);
+const modalProjects = visibleProjects.filter((project) => !project.detailEnabled);
+---
+
+<section class="py-16" data-portfolio-grid>
+  <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+    <div>
+      <h2 class="text-2xl font-black text-white sm:text-3xl">{lang === "en" ? "Project Gallery" : "Galería de proyectos"}</h2>
+    </div>
+  </div>
+
+  <div class="mt-8 flex flex-wrap gap-2" aria-label={lang === "en" ? "Portfolio filters" : "Filtros de portfolio"}>
+    {filters.map((filter, index) => (
+      <button
+        class="portfolio-filter focus-ring rounded-md border border-[var(--color-border)] px-4 py-2 text-sm font-black text-slate-200 transition hover:border-sky-300/50 hover:bg-white/5"
+        type="button"
+        data-filter={filter.key}
+        data-active={index === 0 ? "true" : "false"}
+      >
+        {filter.label[lang]}
+      </button>
+    ))}
+  </div>
+
+  <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {visibleProjects.map((project) => {
+      const categories = [project.group, ...(project.portfolioCategoryTags ?? [])];
+      const image = project.images?.[0];
+      const href = project.detailEnabled && project.detailSlug ? detailPath(project.detailSlug) : undefined;
+
+      return (
+        <article
+          class="portfolio-card group theme-panel relative aspect-[4/3] overflow-hidden transition duration-200 hover:-translate-y-1 hover:border-sky-300/50"
+          data-project-card
+          data-categories={categories.join(" ")}
+        >
+          {image ? (
+            <img class="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-105" src={image.src} alt={image.alt[lang]} loading="lazy" />
+          ) : (
+            <div class="absolute inset-0 grid place-items-center bg-gradient-to-br from-sky-400/35 via-slate-950 to-blue-950">
+              <span class="text-5xl font-black text-white">{project.thumbLabel}</span>
+            </div>
+          )}
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
+
+          <div class="absolute inset-x-0 bottom-0 p-4">
+            <div class="flex items-center justify-between gap-3">
+              <p class="rounded bg-black/55 px-2.5 py-1 text-xs font-black uppercase tracking-wide text-white/80 backdrop-blur">{project.status[lang]}</p>
+              <p class="text-sm font-black text-white/80">{project.year}</p>
+            </div>
+            <h3 class="mt-3 text-2xl font-black leading-tight text-white">{project.title}</h3>
+            <div class="mt-3 flex flex-wrap gap-2">
+              {project.contributionTags.slice(0, 4).map((tag) => (
+                <span class="rounded bg-sky-300/15 px-2 py-1 text-xs font-bold text-sky-50 backdrop-blur">{tag}</span>
+              ))}
+            </div>
+          </div>
+
+          <div class="absolute inset-0 grid place-items-center bg-slate-950/55 opacity-0 transition duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
+            {href ? (
+              <a class="focus-ring rounded-md bg-white px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-sky-100" href={href}>
+                {detailCta}
+              </a>
+            ) : (
+              <button
+                class="focus-ring rounded-md bg-white px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-sky-100"
+                type="button"
+                data-modal-open={project.id}
+              >
+                {modalCta}
+              </button>
+            )}
+          </div>
+        </article>
+      );
+    })}
+  </div>
+
+  <div class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/80 p-4 backdrop-blur" data-project-modal aria-hidden="true">
+    <div class="max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-strong)] shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
+      <div class="flex items-center justify-between gap-4 border-b border-[var(--color-border)] p-4">
+        <p class="text-sm font-black uppercase tracking-wide text-[var(--color-secondary)]" data-modal-status></p>
+        <button class="focus-ring rounded-md border border-[var(--color-border)] px-3 py-2 text-sm font-black text-white transition hover:bg-white/5" type="button" data-modal-close>
+          {closeLabel}
+        </button>
+      </div>
+      <div class="grid gap-0 lg:grid-cols-[1fr_0.72fr]">
+        <div class="relative min-h-[260px] overflow-hidden bg-slate-900">
+          <button class="absolute inset-0 hidden size-full" type="button" data-modal-image-button>
+            <img class="size-full object-cover" src="" alt={fallbackImageAlt[lang]} data-modal-image />
+          </button>
+          <div class="absolute inset-0 grid place-items-center bg-gradient-to-br from-sky-400/35 via-slate-950 to-blue-950" data-modal-fallback>
+            <span class="text-5xl font-black text-white" data-modal-thumb></span>
+          </div>
+          <button class="focus-ring absolute left-3 top-1/2 hidden size-10 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-black/45 text-2xl font-black text-white backdrop-blur transition hover:bg-white/10" type="button" data-modal-prev aria-label={lang === "en" ? "Previous image" : "Imagen anterior"}>
+            ←
+          </button>
+          <button class="focus-ring absolute right-3 top-1/2 hidden size-10 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-black/45 text-2xl font-black text-white backdrop-blur transition hover:bg-white/10" type="button" data-modal-next aria-label={lang === "en" ? "Next image" : "Imagen siguiente"}>
+            →
+          </button>
+          <p class="absolute bottom-3 left-3 hidden rounded bg-black/45 px-2.5 py-1 text-xs font-bold text-white backdrop-blur" data-modal-image-count></p>
+        </div>
+        <div class="p-6">
+          <p class="text-sm font-bold text-slate-400" data-modal-meta></p>
+          <h3 id="project-modal-title" class="mt-3 text-3xl font-black text-white" data-modal-title></h3>
+          <p class="mt-4 leading-7 text-slate-300" data-modal-role></p>
+          <div class="mt-5 flex flex-wrap gap-2" data-modal-tags></div>
+        </div>
+      </div>
+      <div class="grid gap-6 p-6 lg:grid-cols-[1fr_0.5fr]">
+        <div>
+          <h4 class="text-xl font-black text-white">{contributionLabel}</h4>
+          <ul class="mt-4 grid gap-3 text-slate-300" data-modal-highlights></ul>
+        </div>
+        <div class="space-y-6">
+          <div>
+            <h4 class="text-xl font-black text-white">{stackLabel}</h4>
+            <div class="mt-4 flex flex-wrap gap-2" data-modal-stack></div>
+          </div>
+          <div>
+            <h4 class="text-xl font-black text-white">{externalLabel}</h4>
+            <div class="mt-4 flex flex-col gap-3" data-modal-links></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline type="application/json" data-project-modal-data set:html={JSON.stringify(modalProjects.map((project) => ({
+    id: project.id,
+    title: project.title,
+    year: project.year,
+    status: project.status[lang],
+    engine: project.engine,
+    teamOrClient: project.teamOrClient,
+    type: project.type[lang],
+    role: project.roleSummary?.[lang] ?? project.description[lang],
+    tags: project.contributionTags.slice(0, 5),
+    highlights: project.highlights[lang],
+    stack: project.stack,
+    links: project.links.filter((link) => link.href),
+    images: project.images?.map((image) => ({ src: image.src, alt: image.alt[lang] })) ?? [],
+    thumbLabel: project.thumbLabel,
+  })))} />
+</section>
+
+<script>
+  const grids = document.querySelectorAll("[data-portfolio-grid]");
+
+  grids.forEach((grid) => {
+    const filterButtons = Array.from(grid.querySelectorAll<HTMLButtonElement>("[data-filter]"));
+    const cards = Array.from(grid.querySelectorAll<HTMLElement>("[data-project-card]"));
+    const modal = grid.querySelector<HTMLElement>("[data-project-modal]");
+    const modalDataElement = grid.querySelector<HTMLScriptElement>("[data-project-modal-data]");
+    const projects = JSON.parse(modalDataElement?.textContent || "[]");
+    let lastFocused: HTMLElement | null = null;
+    let activeModalProject: any = null;
+    let activeModalImageIndex = 0;
+
+    const setFilter = (filter: string) => {
+      filterButtons.forEach((button) => {
+        button.dataset.active = String(button.dataset.filter === filter);
+      });
+
+      cards.forEach((card) => {
+        const categories = (card.dataset.categories || "").split(" ");
+        card.hidden = filter !== "all" && !categories.includes(filter);
+      });
+    };
+
+    const fillList = (container: Element | null, items: string[], className: string) => {
+      if (!container) return;
+      container.innerHTML = "";
+      items.forEach((item) => {
+        const element = document.createElement("span");
+        element.className = className;
+        element.textContent = item;
+        container.appendChild(element);
+      });
+    };
+
+    const closeModal = () => {
+      if (!modal) return;
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      lastFocused?.focus();
+    };
+
+    const renderModalImage = () => {
+      if (!modal || !activeModalProject) return;
+      const imageButton = modal.querySelector<HTMLElement>("[data-modal-image-button]");
+      const image = modal.querySelector<HTMLImageElement>("[data-modal-image]");
+      const fallback = modal.querySelector<HTMLElement>("[data-modal-fallback]");
+      const prev = modal.querySelector<HTMLElement>("[data-modal-prev]");
+      const next = modal.querySelector<HTMLElement>("[data-modal-next]");
+      const count = modal.querySelector<HTMLElement>("[data-modal-image-count]");
+      const images = activeModalProject.images || [];
+
+      if (imageButton && image && fallback) {
+        if (images.length) {
+          const current = images[activeModalImageIndex];
+          image.src = current.src;
+          image.alt = current.alt;
+          imageButton.classList.remove("hidden");
+          fallback.classList.add("hidden");
+        } else {
+          imageButton.classList.add("hidden");
+          fallback.classList.remove("hidden");
+        }
+      }
+
+      [prev, next, count].forEach((element) => {
+        if (!element) return;
+        element.classList.toggle("hidden", images.length <= 1);
+        if (element !== count) element.classList.toggle("grid", images.length > 1);
+      });
+      if (count && images.length > 1) count.textContent = `${activeModalImageIndex + 1} / ${images.length}`;
+    };
+
+    const moveModalImage = (step: number) => {
+      if (!activeModalProject?.images?.length) return;
+      activeModalImageIndex = (activeModalImageIndex + step + activeModalProject.images.length) % activeModalProject.images.length;
+      renderModalImage();
+    };
+
+    const openModal = (projectId: string, trigger: HTMLElement) => {
+      const project = projects.find((item: any) => item.id === projectId);
+      if (!project || !modal) return;
+      lastFocused = trigger;
+      activeModalProject = project;
+      activeModalImageIndex = 0;
+
+      const links = modal.querySelector("[data-modal-links]");
+      const highlights = modal.querySelector("[data-modal-highlights]");
+
+      modal.querySelector("[data-modal-status]")!.textContent = project.status;
+      modal.querySelector("[data-modal-meta]")!.textContent = `${project.year} · ${project.type} · ${project.engine}`;
+      modal.querySelector("[data-modal-title]")!.textContent = project.title;
+      modal.querySelector("[data-modal-role]")!.textContent = project.role;
+      modal.querySelector("[data-modal-thumb]")!.textContent = project.thumbLabel;
+      renderModalImage();
+
+      fillList(modal.querySelector("[data-modal-tags]"), project.tags, "rounded bg-sky-300/10 px-2.5 py-1 text-xs font-bold text-sky-100");
+      fillList(modal.querySelector("[data-modal-stack]"), project.stack, "rounded bg-white/7 px-2.5 py-1 text-xs font-bold text-slate-200");
+
+      if (highlights) {
+        highlights.innerHTML = "";
+        project.highlights.forEach((item: string) => {
+          const li = document.createElement("li");
+          li.className = "theme-panel flex gap-3 p-3";
+          const bullet = document.createElement("span");
+          bullet.className = "mt-2 size-1.5 shrink-0 rounded-full bg-[var(--color-primary)]";
+          const text = document.createElement("span");
+          text.textContent = item;
+          li.append(bullet, text);
+          highlights.appendChild(li);
+        });
+      }
+
+      if (links) {
+        links.innerHTML = "";
+        project.links.forEach((link: { label: string; href: string }) => {
+          const anchor = document.createElement("a");
+          anchor.className = "focus-ring rounded-md bg-white px-4 py-3 text-sm font-black text-slate-950 transition hover:bg-sky-100";
+          anchor.href = link.href;
+          anchor.target = "_blank";
+          anchor.rel = "noreferrer";
+          anchor.textContent = link.label;
+          links.appendChild(anchor);
+        });
+      }
+
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      modal.querySelector<HTMLButtonElement>("[data-modal-close]")?.focus();
+    };
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => setFilter(button.dataset.filter || "all"));
+    });
+
+    grid.querySelectorAll<HTMLButtonElement>("[data-modal-open]").forEach((button) => {
+      button.addEventListener("click", () => openModal(button.dataset.modalOpen || "", button));
+    });
+
+    modal?.querySelector("[data-modal-close]")?.addEventListener("click", closeModal);
+    modal?.querySelector("[data-modal-prev]")?.addEventListener("click", () => moveModalImage(-1));
+    modal?.querySelector("[data-modal-next]")?.addEventListener("click", () => moveModalImage(1));
+    modal?.querySelector("[data-modal-image-button]")?.addEventListener("click", () => moveModalImage(1));
+    modal?.addEventListener("click", (event) => {
+      if (event.target === modal) closeModal();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (modal?.getAttribute("aria-hidden") !== "false") return;
+      if (event.key === "Escape") closeModal();
+      if (event.key === "ArrowLeft") moveModalImage(-1);
+      if (event.key === "ArrowRight") moveModalImage(1);
+    });
+  });
+</script>

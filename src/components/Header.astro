@@ -1,4 +1,5 @@
 ---
+import { faGithub, faItchIo, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { navItems, profile, routeMap, type Lang, type RouteKey } from "@/data/site";
 
 interface Props {
@@ -9,14 +10,42 @@ interface Props {
 const { lang, active } = Astro.props;
 const otherLang = lang === "en" ? "es" : "en";
 const menuLabel = lang === "en" ? "Menu" : "Menú";
+const brandIcons = {
+  LinkedIn: faLinkedin,
+  GitHub: faGithub,
+  "Itch.io": faItchIo,
+};
+const headerSocialLinks = profile.links
+  .filter((link) => link.label in brandIcons)
+  .map((link) => ({ ...link, icon: brandIcons[link.label as keyof typeof brandIcons] }));
 ---
 
 <header class="sticky top-0 z-40 border-b border-[var(--color-border)] bg-[color:rgba(7,11,18,0.88)] backdrop-blur">
   <nav class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4" aria-label={lang === "en" ? "Main" : "Principal"}>
-    <a class="focus-ring flex items-center gap-3 rounded-sm" href={routeMap.home[lang]} aria-label={lang === "en" ? "Go home" : "Ir al inicio"}>
-      <span class="grid size-9 place-items-center rounded-md bg-white text-sm font-black text-slate-950">JA</span>
-      <span class="hidden text-sm font-semibold text-white sm:inline">{profile.name}</span>
-    </a>
+    <div class="flex items-center gap-4">
+      <a class="focus-ring flex items-center gap-3 rounded-sm" href={routeMap.home[lang]} aria-label={lang === "en" ? "Go home" : "Ir al inicio"}>
+        <span class="grid size-9 place-items-center rounded-md bg-white text-sm font-black text-slate-950">JA</span>
+        <span class="hidden text-base font-bold text-white sm:inline">{profile.name}</span>
+      </a>
+      <div class="hidden items-center gap-2 md:flex">
+        {headerSocialLinks.map((link) => (
+          <a
+            class="focus-ring grid size-9 place-items-center rounded-md border border-[var(--color-border)] bg-white/6 text-slate-300 transition hover:border-sky-300/45 hover:bg-white/12 hover:text-white"
+            href={link.href}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={link.label}
+            title={link.label}
+          >
+            <svg class="size-[18px]" viewBox={`0 0 ${link.icon.icon[0]} ${link.icon.icon[1]}`} fill="currentColor" aria-hidden="true">
+              {(Array.isArray(link.icon.icon[4]) ? link.icon.icon[4] : [link.icon.icon[4]]).map((path) => (
+                <path d={path}></path>
+              ))}
+            </svg>
+          </a>
+        ))}
+      </div>
+    </div>
 
     <button
       class="focus-ring rounded-md border border-[var(--color-border)] px-3 py-2 text-sm font-bold text-white md:hidden"
@@ -34,7 +63,7 @@ const menuLabel = lang === "en" ? "Menu" : "Menú";
           navItems[lang].map((item) => (
             <a
               class:list={[
-                "focus-ring rounded-sm px-2.5 py-2 text-sm font-medium transition hover:text-white sm:px-3",
+                "focus-ring rounded-sm px-2.5 py-2 text-base font-semibold transition hover:text-white sm:px-3",
                 item.key === active ? "text-white" : "text-slate-300",
               ]}
               href={routeMap[item.key][lang]}
@@ -43,7 +72,7 @@ const menuLabel = lang === "en" ? "Menu" : "Menú";
             </a>
           ))
         }
-        <a class="focus-ring mt-2 rounded-md border border-[var(--color-border)] px-3 py-2 text-sm font-black text-[var(--color-primary)] transition hover:bg-white/5 md:mt-0" href={routeMap[active][otherLang]}>
+        <a class="focus-ring mt-2 rounded-md border border-[var(--color-border)] px-3 py-2 text-base font-black text-[var(--color-primary)] transition hover:bg-white/5 md:mt-0" href={routeMap[active][otherLang]}>
           {otherLang.toUpperCase()}
         </a>
       </div>

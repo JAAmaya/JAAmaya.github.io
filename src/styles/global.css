@@ -77,6 +77,12 @@ body {
   filter: grayscale(0);
 }
 
+.portfolio-filter[data-active="true"] {
+  border-color: var(--color-primary);
+  background: rgba(125, 211, 252, 0.14);
+  color: white;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

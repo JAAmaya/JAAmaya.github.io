@@ -4,6 +4,6 @@ import HomePage from "@/components/HomePage.astro";
 import { home, profile } from "@/data/site";
 ---
 
-<BaseLayout title={`${profile.name} | Personal Website`} description={home.en.summary} lang="en">
+<BaseLayout title={`${profile.name} | Personal Website`} description={home.en.about.body} lang="en">
   <HomePage lang="en" />
 </BaseLayout>

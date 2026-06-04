@@ -8,7 +8,6 @@ interface Props {
 const { lang } = Astro.props;
 ---
 
-<footer class="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-8 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
+<footer class="mx-auto max-w-6xl px-5 py-8 text-sm text-slate-400">
   <p>&copy; {new Date().getFullYear()} {profile.name}. {lang === "en" ? "Personal website." : "Web personal."}</p>
-  <p>Astro + TypeScript + Tailwind CSS.</p>
 </footer>

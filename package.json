@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@astrojs/check": "latest",
+    "@fortawesome/free-brands-svg-icons": "^7.2.0",
+    "@lucide/astro": "^1.17.0",
     "astro": "latest",
     "typescript": "latest"
   },
