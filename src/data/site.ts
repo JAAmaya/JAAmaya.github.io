@@ -18,6 +18,8 @@ export const routeMap = {
 
 export type RouteKey = keyof typeof routeMap;
 
+export const hiddenRouteKeys: RouteKey[] = ["blog"];
+
 export const navItems: Localized<Array<{ key: RouteKey; label: string }>> = {
   en: [
     { key: "home", label: "Home" },

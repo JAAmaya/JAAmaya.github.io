@@ -1,7 +1,7 @@
 ---
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import { home, profile, routeMap, type Lang, type RouteKey } from "@/data/site";
+import { hiddenRouteKeys, home, profile, routeMap, type Lang, type RouteKey } from "@/data/site";
 import { ArrowRight, Binary, Box, CodeXml, Cpu, FileText, Gamepad2, LayoutGrid, Mail, MapPin, PencilLine, Sigma, UserRound } from "@lucide/astro";
 
 interface Props {
@@ -10,6 +10,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const content = home[lang];
+const visibleCards = content.cards.filter((card) => !hiddenRouteKeys.includes(card.key));
 
 const cardIcons: Partial<Record<RouteKey, typeof UserRound>> = {
   home: UserRound,
@@ -82,7 +83,7 @@ const aboutFactIcons: Record<string, typeof UserRound> = {
     </div>
     <div class="mx-auto max-w-6xl px-5 py-2">
       <div class="flex flex-wrap gap-3">
-      {content.cards.map((card) => {
+      {visibleCards.map((card) => {
         const Icon = cardIcons[card.key] ?? ArrowRight;
         const buttonStyle = cardButtonStyles[card.key] ?? "border-[var(--color-border)] bg-white/[0.04] text-white hover:border-sky-300/35 hover:bg-white/[0.08]";
         const iconStyle = cardIconStyles[card.key] ?? "text-sky-200";
