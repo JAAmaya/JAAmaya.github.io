@@ -53,7 +53,7 @@ const aboutFactIcons: Record<string, typeof UserRound> = {
           {content.title}
         </h1>
         <div class="mt-5">
-          <p class="inline-flex whitespace-nowrap rounded-full border border-[var(--color-primary)]/25 bg-sky-300/10 px-4 py-1.5 text-[clamp(0.95rem,2.6vw,1.25rem)] font-medium text-sky-100">
+          <p class="home-eyebrow inline-flex max-w-full whitespace-nowrap rounded-full border border-[var(--color-primary)]/25 bg-sky-300/10 px-4 py-1.5 font-medium text-sky-100">
             {content.eyebrow}
           </p>
         </div>
@@ -130,3 +130,9 @@ const aboutFactIcons: Record<string, typeof UserRound> = {
   </section>
 </main>
 <Footer lang={lang} />
+
+<style>
+  .home-eyebrow {
+    font-size: clamp(0.75rem, 3.55vw, 1.25rem);
+  }
+</style>
