@@ -41,6 +41,11 @@ const imageSourcesByProjectId: Partial<Record<site.Project["id"], ImageMetadata[
     portfolioImages.darnosTiempo.screenshot1,
     portfolioImages.darnosTiempo.screenshot2,
   ],
+  "vulkan-engine": [
+    portfolioImages.vulkanEngine.shadowMappingBias,
+    portfolioImages.vulkanEngine.shadowMappingPcf2Lights,
+    portfolioImages.vulkanEngine.rtShadowsSoft2Lights,
+  ],
 };
 
 const withProjectImages = <T extends site.Project>(project: T): T & ProjectWithImages => {

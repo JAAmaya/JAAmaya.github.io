@@ -619,6 +619,72 @@ export const portfolioProjects: Record<"professional" | "personal", Project[]> =
       visualTone: "green",
     },
     {
+      id: "vulkan-engine",
+      title: "Vulkan Engine",
+      year: "2026",
+      context: { en: "University graphics project", es: "Proyecto universitario de informática gráfica" },
+      teamOrClient: "Universidad Rey Juan Carlos",
+      engine: "C++ / Vulkan",
+      type: { en: "Real-time rendering engine prototype", es: "Prototipo de motor de render en tiempo real" },
+      status: { en: "Technical Demo", es: "Demo técnica" },
+      description: {
+        en: "A personal rendering project grown from university graphics assignments into a modular Vulkan renderer focused on deferred shading, screen-space effects, shadow mapping, and early ray-query visibility.",
+        es: "Proyecto personal de render que evolucionó desde prácticas universitarias de gráficos hasta convertirse en un renderer modular en Vulkan centrado en deferred shading, efectos en espacio de pantalla, shadow mapping y una ruta inicial de visibilidad con ray queries.",
+      },
+      contributionTags: ["Deferred Rendering", "Render Architecture", "PBR Shading", "SSAO", "Shadow Mapping", "Ray Queries"],
+      highlights: {
+        en: [
+          "Structured the renderer as an explicit Vulkan pass chain covering shadow maps, depth, G-buffer, SSAO, composition, skybox, and postprocess.",
+          "Implemented multi-light shadow mapping with 2D array depth targets, slope-dependent bias, and manual PCF filtering.",
+          "Integrated BLAS/TLAS setup and a ray-query visibility path for softer shadow evaluation within the deferred renderer.",
+        ],
+        es: [
+          "Estructuré el renderer como una cadena explícita de pasadas Vulkan que cubre shadow maps, depth, G-buffer, SSAO, composición, skybox y postproceso.",
+          "Implementé shadow mapping multi-luz con depth targets en 2D array, bias dependiente de inclinación y filtrado PCF manual.",
+          "Integré la construcción de BLAS/TLAS y una ruta de visibilidad con ray queries para evaluar sombras más suaves dentro del renderer deferred.",
+        ],
+      },
+      stack: ["C++17", "Vulkan", "GLSL", "CMake", "GLFW", "GLM", "vcpkg"],
+      links: [{ label: "GitHub", href: "https://github.com/JAAmaya/VulkanEngine" }],
+      images: [
+        {
+          src: "/portfolio/vulkan-engine/shadow-mapping-bias.png",
+          alt: {
+            en: "Shadow mapping result with depth bias in the Vulkan renderer",
+            es: "Resultado de shadow mapping con depth bias en el renderer Vulkan",
+          },
+        },
+        {
+          src: "/portfolio/vulkan-engine/shadow-mapping-pcf-2-lights.png",
+          alt: {
+            en: "Shadow mapping with PCF filtering and two lights in the Vulkan renderer",
+            es: "Shadow mapping con filtrado PCF y dos luces en el renderer Vulkan",
+          },
+        },
+        {
+          src: "/portfolio/vulkan-engine/rt-shadows-soft-2-lights.png",
+          alt: {
+            en: "Ray-query soft shadows with two lights in the Vulkan renderer",
+            es: "Sombras suaves con ray query y dos luces en el renderer Vulkan",
+          },
+        },
+      ],
+      detailSlug: "vulkan-engine",
+      detailEnabled: true,
+      detailRole: { en: "Graphics Programmer", es: "Programador de gráficos" },
+      publicPortfolioCategory: "technical",
+      cardSummary: {
+        en: "Vulkan renderer with deferred shading, SSAO, shadow mapping, and ray-query visibility.",
+        es: "Renderer en Vulkan con deferred shading, SSAO, shadow mapping y visibilidad con ray queries.",
+      },
+      roleSummary: {
+        en: "Designed the rendering architecture, implemented the core shader passes, and extended the visibility pipeline with raster and ray-query shadows.",
+        es: "Diseñé la arquitectura de render, implementé las pasadas principales de shaders y amplié la tubería de visibilidad con sombras raster y ray queries.",
+      },
+      thumbLabel: "VK",
+      visualTone: "blue",
+    },
+    {
       id: "procedural-levels",
       title: "Procedural Level Generation",
       year: "2024",

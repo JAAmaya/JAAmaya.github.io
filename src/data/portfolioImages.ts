@@ -23,6 +23,10 @@ import gpuMarineSeagullsDetail from "@/assets/portfolio/gpu-marine-graphics-demo
 import darnosTiempoScreenshot1 from "@/assets/portfolio/darnos-tiempo/screenshot-1.png";
 import darnosTiempoScreenshot2 from "@/assets/portfolio/darnos-tiempo/screenshot-2.png";
 
+import vulkanEngineShadowMappingBias from "@/assets/portfolio/vulkan-engine/shadow-mapping-bias.png";
+import vulkanEngineShadowMappingPcf2Lights from "@/assets/portfolio/vulkan-engine/shadow-mapping-pcf-2-lights.png";
+import vulkanEngineRtShadowsSoft2Lights from "@/assets/portfolio/vulkan-engine/rt-shadows-soft-2-lights.png";
+
 export const portfolioImages = {
   virion: {
     geometryLab: virionGeometryLab,
@@ -54,5 +58,10 @@ export const portfolioImages = {
   darnosTiempo: {
     screenshot1: darnosTiempoScreenshot1,
     screenshot2: darnosTiempoScreenshot2,
+  },
+  vulkanEngine: {
+    shadowMappingBias: vulkanEngineShadowMappingBias,
+    shadowMappingPcf2Lights: vulkanEngineShadowMappingPcf2Lights,
+    rtShadowsSoft2Lights: vulkanEngineRtShadowsSoft2Lights,
   },
 } as const;
