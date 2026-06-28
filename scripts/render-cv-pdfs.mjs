@@ -1,7 +1,8 @@
-import { existsSync, mkdirSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, rmSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { tmpdir } from "node:os";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const outputDir = resolve(root, "public", "cv");
@@ -49,17 +50,21 @@ const jobs = [
 ];
 
 for (const job of jobs) {
+  const profileDir = mkdtempSync(resolve(tmpdir(), "cv-print-"));
   const render = spawnSync(
     chrome,
     [
       "--headless",
       "--disable-gpu",
       "--no-pdf-header-footer",
+      `--user-data-dir=${profileDir}`,
       `--print-to-pdf=${job.output}`,
       pathToFileURL(job.input).href,
     ],
     { cwd: root, stdio: "inherit" },
   );
+
+  rmSync(profileDir, { recursive: true, force: true });
 
   if (render.error) {
     throw render.error;

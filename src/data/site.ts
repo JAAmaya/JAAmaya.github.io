@@ -1,6 +1,7 @@
 ﻿export type Lang = "en" | "es";
 
 type Localized<T> = Record<Lang, T>;
+export type RichTextPart = string | { label: string; href: string };
 
 export const languages: Record<Lang, { label: string; home: string }> = {
   en: { label: "EN", home: "/" },
@@ -141,16 +142,24 @@ export const cv = {
         role: "Unity Developer",
         company: "Vacaflama Studio",
         period: "Jun 2024 - Present",
-        description:
-          "Unity developer at Vacaflama Studio. I implemented gameplay logic, UI flows, internal editor tools, WebGL and Android release work, and reusable Unity project structure. I published El Gran Teatro del Mundo: El Videojuego and currently develop race gameplay prepared for future netcode in SUN BURN NITRO.",
+        description: [
+          "Unity Developer and technical lead at Vacaflama Studio. I work on C# scripting, netcode, game design, optimization, editor tooling, and asset/UI integration. I published ",
+          { label: "\"El Gran Teatro del Mundo: El Videojuego\"", href: "/portfolio/gran-teatro" },
+          " for WebGL and Android, and I am currently developing ",
+          { label: "\"SUN BURN NITRO\"", href: "/portfolio/sun-burn-nitro" },
+          ", a multiplayer arcade racing game.",
+        ],
         links: [{ label: "El Gran Teatro del Mundo", href: "/portfolio/gran-teatro" }],
       },
       {
         role: "VR Unity Developer",
         company: "Premium Cine, VR Department",
         period: "Oct 2023 - May 2024",
-        description:
-          "I implemented VR interactions, activity logic, asset integration and localization-ready content for four VIRION educational applications, a pan-European Erasmus+ project focused on immersive STEM learning.",
+        description: [
+          "VR Unity Developer at Premium Cine, VR Department. I implemented VR interactions, user flows, and asset integration for four ",
+          { label: "\"VIRION\"", href: "/portfolio/virion" },
+          " educational applications, an Erasmus+ project focused on immersive STEM learning. I also prepared content and interfaces so the experiences were clear, stable, and localization-ready.",
+        ],
         links: [{ label: "VIRION Project", href: "/portfolio/virion" }],
       },
     ],
@@ -159,16 +168,24 @@ export const cv = {
         role: "Desarrollador Unity",
         company: "Vacaflama Studio",
         period: "Jun 2024 - Presente",
-        description:
-          "Desarrollador Unity en Vacaflama Studio. Implementé lógica de gameplay, flujos de UI, herramientas internas de editor, publicación WebGL y Android, y estructura reutilizable de proyecto Unity. Publiqué El Gran Teatro del Mundo: El Videojuego y actualmente desarrollo gameplay de carreras preparado para futuro netcode en SUN BURN NITRO.",
+        description: [
+          "Desarrollador Unity y líder técnico en Vacaflama Studio. Trabajo en scripting C#, netcode, game design, optimización, creación de herramientas de editor e integración de assets e interfaces. Publiqué ",
+          { label: "\"El Gran Teatro del Mundo: El Videojuego\"", href: "/es/portfolio/gran-teatro" },
+          " para WebGL y Android, y actualmente desarrollo ",
+          { label: "\"SUN BURN NITRO\"", href: "/es/portfolio/sun-burn-nitro" },
+          ", un juego de carreras arcade multijugador.",
+        ],
         links: [{ label: "El Gran Teatro del Mundo", href: "/es/portfolio/gran-teatro" }],
       },
       {
         role: "Desarrollador VR en Unity",
         company: "Premium Cine, Departamento VR",
         period: "Oct 2023 - May 2024",
-        description:
-          "Implementé interacciones VR, lógica de actividades, integración de assets y contenido preparado para localización en cuatro aplicaciones educativas de VIRION, un proyecto Erasmus+ centrado en aprendizaje inmersivo STEM.",
+        description: [
+          "Desarrollador VR en Unity en Premium Cine, Departamento VR. Implementé interacciones VR, flujos de usuario e integración de assets para cuatro aplicaciones educativas de ",
+          { label: "\"VIRION\"", href: "/es/portfolio/virion" },
+          ", un proyecto Erasmus+ centrado en aprendizaje inmersivo STEM. También preparé contenido e interfaces para que las experiencias fueran claras, estables y localizables.",
+        ],
         links: [{ label: "VIRION Project", href: "/es/portfolio/virion" }],
       },
     ],
@@ -299,8 +316,8 @@ export const portfolioProjects: Record<"professional" | "personal", Project[]> =
         es: "Cuatro aplicaciones VR educativas creadas para una iniciativa europea de aprendizaje STEM.",
       },
       roleSummary: {
-        en: "I implemented Unity VR interactions, activity logic, educational asset integration, and localization-ready text structures for the STEM modules.",
-        es: "Implementé interacciones VR en Unity, lógica de actividades, integración de assets educativos y estructuras de texto preparadas para localización en los módulos STEM.",
+        en: "I implemented Unity VR interactions, user flows, educational asset integration, and localization-ready text structures for the STEM modules.",
+        es: "Implementé interacciones VR en Unity, flujos de usuario, integración de assets educativos y estructuras de texto preparadas para localización en los módulos STEM.",
       },
       thumbLabel: "VR",
       visualTone: "blue",
