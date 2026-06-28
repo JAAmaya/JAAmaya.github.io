@@ -262,7 +262,7 @@ export const portfolioProjects: Record<"professional" | "personal", Project[]> =
       teamOrClient: "Premium Cine, VR Department",
       engine: "Unity VR",
       type: { en: "Educational VR applications", es: "Aplicaciones VR educativas" },
-      status: { en: "Professional project", es: "Proyecto profesional" },
+      status: { en: "VR Project", es: "Proyecto VR" },
       description: {
         en: "A set of four educational VR applications created for VIRION, a pan-European Erasmus+ project exploring immersive learning for STEM subjects.",
         es: "Conjunto de cuatro aplicaciones VR educativas creadas para VIRION, un proyecto paneuropeo financiado por Erasmus+ sobre aprendizaje inmersivo en materias STEM.",
@@ -332,7 +332,7 @@ export const portfolioProjects: Record<"professional" | "personal", Project[]> =
       teamOrClient: "Vacaflama Studio / Compañía Nacional de Teatro Clásico",
       engine: "Unity",
       type: { en: "2D graphic adventure", es: "Aventura gráfica 2D" },
-      status: { en: "Published", es: "Publicado" },
+      status: { en: "Published Project", es: "Proyecto publicado" },
       description: {
         en: "A published 2D graphic adventure for WebGL and Android, created as a videogame reinterpretation of the classical stage play.",
         es: "Aventura gráfica 2D publicada para WebGL y Android, creada como reinterpretación en videojuego de la obra teatral clásica.",
@@ -458,7 +458,7 @@ export const portfolioProjects: Record<"professional" | "personal", Project[]> =
       teamOrClient: "Universidad Rey Juan Carlos / typtyp studios",
       engine: "Unity",
       type: { en: "Online multiplayer typing duel", es: "Duelo online de mecanografía" },
-      status: { en: "Academic work", es: "Trabajo académico" },
+      status: { en: "Game", es: "Videojuego" },
       description: {
         en: "An online multiplayer typing duel game that combines real-time writing pressure with cards, spells and status effects.",
         es: "Juego multijugador online de duelos de mecanografía que combina presión de escritura en tiempo real con cartas, hechizos y estados.",
@@ -516,7 +516,7 @@ export const portfolioProjects: Record<"professional" | "personal", Project[]> =
       teamOrClient: "Universidad Rey Juan Carlos",
       engine: "Unity URP",
       type: { en: "Real-time graphics demo", es: "Demo gráfica en tiempo real" },
-      status: { en: "Academic work", es: "Trabajo académico" },
+      status: { en: "Technical Demo", es: "Demo técnica" },
       description: {
         en: "A Unity URP technical demo focused on advanced graphics pipeline stages: adaptive ocean tessellation, displacement, procedural geometry and GPU-driven creature movement.",
         es: "Demo técnica en Unity URP centrada en etapas avanzadas del cauce gráfico: teselación adaptativa de océano, displacement, geometría procedural y movimiento de criaturas en GPU.",
@@ -576,7 +576,7 @@ export const portfolioProjects: Record<"professional" | "personal", Project[]> =
       teamOrClient: "Vacaflama",
       engine: "Unity",
       type: { en: "3D graphic adventure", es: "Aventura gráfica 3D" },
-      status: { en: "Jam project", es: "Proyecto de jam" },
+      status: { en: "Jam Project", es: "Proyecto de jam" },
       description: {
         en: "A 3D graphic adventure created during a game jam with Vacaflama.",
         es: "Aventura gráfica 3D desarrollada durante una jam con Vacaflama.",

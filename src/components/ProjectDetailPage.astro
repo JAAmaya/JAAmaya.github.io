@@ -104,7 +104,6 @@ const facts = [
 
       <div>
         <h2 class="text-3xl font-black text-white">{lang === "en" ? "My Contribution" : "Mi contribución"}</h2>
-        <p class="mt-5 max-w-3xl leading-8 text-slate-300">{project.roleSummary?.[lang] ?? project.description[lang]}</p>
         <ul class="mt-6 grid gap-4 text-slate-300">
           {project.highlights[lang].map((item) => (
             <li class="theme-panel flex gap-4 p-4">
