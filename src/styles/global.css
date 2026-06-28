@@ -83,6 +83,37 @@ body {
   color: white;
 }
 
+.portfolio-inline-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(125, 211, 252, 0.35) transparent;
+}
+
+.portfolio-inline-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.portfolio-inline-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.portfolio-inline-scroll::-webkit-scrollbar-thumb {
+  background: rgba(125, 211, 252, 0.35);
+  border-radius: 999px;
+}
+
+.portfolio-tag-marquee.is-animating {
+  mask-image: linear-gradient(90deg, transparent 0, black 1rem, black calc(100% - 1rem), transparent 100%);
+}
+
+.portfolio-tag-track {
+  width: max-content;
+}
+
+.portfolio-tag-track.is-animating {
+  animation: portfolio-tag-marquee 16s linear infinite;
+  will-change: transform;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -102,5 +133,15 @@ body {
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+@keyframes portfolio-tag-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-1 * var(--marquee-distance, 0px)));
   }
 }

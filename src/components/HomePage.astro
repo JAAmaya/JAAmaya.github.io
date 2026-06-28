@@ -1,8 +1,8 @@
 ---
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import { allPortfolioProjects, home, profile, routeMap, type Lang } from "@/data/site";
-import { ArrowRight, Box, FileText, LayoutGrid, Mail, MapPin, PencilLine, UserRound } from "@lucide/astro";
+import { home, profile, routeMap, type Lang, type RouteKey } from "@/data/site";
+import { ArrowRight, Binary, Box, CodeXml, Cpu, FileText, Gamepad2, LayoutGrid, Mail, MapPin, PencilLine, Sigma, UserRound } from "@lucide/astro";
 
 interface Props {
   lang: Lang;
@@ -10,77 +10,55 @@ interface Props {
 
 const { lang } = Astro.props;
 const content = home[lang];
-const heroImages = allPortfolioProjects
-  .filter((project) => !project.hiddenFromPortfolio)
-  .flatMap((project) => project.images?.map((image) => ({ ...image, projectTitle: project.title })) ?? []);
-const heroRows = Array.from({ length: 4 }, (_, rowIndex) => {
-  const repeatedImages = [...heroImages, ...heroImages, ...heroImages];
-  return repeatedImages.slice(rowIndex * 4, rowIndex * 4 + 5);
-});
 
-const cardIcons = {
+const cardIcons: Partial<Record<RouteKey, typeof UserRound>> = {
   home: UserRound,
   portfolio: LayoutGrid,
   cv: FileText,
-  team: UserRound,
   blog: PencilLine,
+};
+
+const cardButtonStyles: Partial<Record<RouteKey, string>> = {
+  portfolio:
+    "border-sky-300/25 bg-gradient-to-br from-sky-200 via-cyan-100 to-slate-50 text-slate-950 shadow-[0_12px_28px_rgba(56,189,248,0.14)] hover:-translate-y-0.5 hover:brightness-105 hover:shadow-[0_16px_34px_rgba(56,189,248,0.18)]",
+  cv:
+    "border-amber-200/25 bg-gradient-to-br from-slate-50 via-amber-50 to-orange-100 text-slate-950 shadow-[0_12px_28px_rgba(251,191,36,0.12)] hover:-translate-y-0.5 hover:brightness-105 hover:shadow-[0_16px_34px_rgba(251,191,36,0.16)]",
+};
+
+const cardIconStyles: Partial<Record<RouteKey, string>> = {
+  portfolio: "text-slate-950",
+  cv: "text-slate-950",
+  blog: "text-sky-200",
+};
+
+const aboutFactIcons: Record<string, typeof UserRound> = {
+  Unity: Gamepad2,
+  VR: Box,
+  Scripting: CodeXml,
+  "Gameplay Logic": Cpu,
+  "Computer Graphics": Binary,
 };
 
 ---
 
 <Header lang={lang} active="home" />
 <main>
-  <section class="relative isolate overflow-hidden border-b border-[var(--color-border)]">
-    <div class="absolute inset-0 -z-20 overflow-hidden blur-[2px]" aria-hidden="true">
-      <div class="absolute inset-x-[-12rem] top-1/2 flex -translate-y-1/2 flex-col gap-2">
-        {heroRows.map((row, rowIndex) => (
-          <div
-            class:list={[
-              "grid h-36 grid-cols-5 gap-2 sm:h-44 lg:h-52",
-              rowIndex % 2 === 0 ? "translate-x-0" : "translate-x-24 sm:translate-x-36 lg:translate-x-48",
-            ]}
-          >
-            {row.map((image, imageIndex) => (
-              <div class="overflow-hidden rounded-sm border border-black/55 bg-slate-900 shadow-[0_0_0_1px_rgba(255,255,255,0.06)]">
-                <img
-                  class="size-full object-cover opacity-[0.58] saturate-[0.82]"
-                  src={image.src}
-                  alt=""
-                  loading={rowIndex < 2 && imageIndex < 4 ? "eager" : "lazy"}
-                />
-              </div>
-            ))}
-          </div>
-        ))}
+  <section class="relative isolate overflow-hidden bg-[radial-gradient(circle_at_20%_20%,rgba(14,165,233,0.18),transparent_32%),radial-gradient(circle_at_80%_30%,rgba(56,189,248,0.08),transparent_24%),linear-gradient(180deg,rgba(7,11,18,0.98)_0%,rgba(7,11,18,0.94)_100%)]">
+    <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_20%,rgba(14,165,233,0.18),transparent_32%),radial-gradient(circle_at_80%_30%,rgba(56,189,248,0.08),transparent_24%),linear-gradient(180deg,rgba(7,11,18,0.98)_0%,rgba(7,11,18,0.94)_100%)]"></div>
+
+    <div class="mx-auto max-w-6xl px-7 pt-16 sm:px-8 lg:px-10 lg:pt-20">
+      <div class="max-w-4xl">
+        <h1 class="whitespace-nowrap text-[clamp(2.35rem,6vw,4.5rem)] font-black leading-[1.02] text-white">
+          {content.title}
+        </h1>
+        <div class="mt-5">
+          <p class="inline-flex whitespace-nowrap rounded-full border border-[var(--color-primary)]/25 bg-sky-300/10 px-4 py-1.5 text-[clamp(0.95rem,2.6vw,1.25rem)] font-medium text-sky-100">
+            {content.eyebrow}
+          </p>
+        </div>
       </div>
     </div>
-    <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_25%_35%,rgba(14,165,233,0.24),transparent_34%),linear-gradient(90deg,rgba(7,11,18,0.96)_0%,rgba(7,11,18,0.86)_44%,rgba(7,11,18,0.72)_100%)]"></div>
-    <div class="absolute inset-0 -z-10 bg-black/32"></div>
-
-    <div class="mx-auto flex max-w-6xl flex-col justify-center px-5 py-12 lg:py-14">
-    <div class="max-w-4xl rounded-lg border border-white/10 bg-slate-950/32 p-5 shadow-2xl shadow-black/30 backdrop-blur-[1px] sm:p-7">
-      <p class="mb-5 inline-flex rounded-full border border-[var(--color-primary)]/25 bg-sky-300/10 px-3 py-1 text-sm font-medium text-sky-100">
-        {content.eyebrow}
-      </p>
-      <h1 class="max-w-3xl text-5xl font-black leading-[1.02] text-white sm:text-6xl lg:text-7xl">
-        {content.title}
-      </h1>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a class="focus-ring inline-flex items-center gap-2.5 rounded-md bg-[var(--color-primary)] px-6 py-3.5 text-base font-black text-slate-950 transition hover:brightness-110" href={routeMap.portfolio[lang]}>
-          <LayoutGrid class="size-5" aria-hidden="true" />
-          {content.primaryCta}
-        </a>
-        <a class="focus-ring inline-flex items-center gap-2.5 rounded-md border border-[var(--color-border)] px-6 py-3.5 text-base font-black text-white transition hover:bg-white/5" href={routeMap.cv[lang]}>
-          <FileText class="size-5" aria-hidden="true" />
-          {content.secondaryCta}
-        </a>
-      </div>
-    </div>
-    </div>
-  </section>
-
-  <section class="border-y border-[var(--color-border)] bg-white/[0.03]">
-    <div class="mx-auto grid max-w-6xl gap-5 px-5 py-12 lg:grid-cols-[1fr_18rem]">
+    <div class="mx-auto max-w-6xl px-5 py-6">
       <article class="theme-panel p-6">
         <div class="mb-4 flex items-center gap-3">
           <span class="grid size-10 place-items-center rounded-md bg-sky-300/12 text-sky-200">
@@ -92,57 +70,61 @@ const cardIcons = {
         <div class="mt-5 flex flex-wrap gap-2">
           {content.about.facts.map((fact) => (
             <span class="inline-flex items-center gap-1.5 rounded-md border border-[var(--color-border)] bg-white/5 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.08em] text-slate-200">
-              {fact === "VR" ? <Box class="size-3.5" aria-hidden="true" /> : <ArrowRight class="size-3.5 text-sky-300" aria-hidden="true" />}
+              {(() => {
+                const Icon = aboutFactIcons[fact] ?? Sigma;
+                return <Icon class="size-3.5 text-sky-300" aria-hidden="true" />;
+              })()}
               {fact}
             </span>
           ))}
         </div>
       </article>
-
-      <aside class="theme-panel grid gap-4 p-6">
-        <div class="flex items-start gap-3">
-          <span class="grid size-9 shrink-0 place-items-center rounded-md bg-white/8 text-sky-200">
-            <Mail class="size-4" aria-hidden="true" />
-          </span>
-          <div>
-            <p class="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Email</p>
-            <a class="focus-ring mt-1 inline-flex rounded text-sm font-semibold text-white hover:text-sky-200" href={`mailto:${profile.email}`}>
-              {profile.email}
-            </a>
-          </div>
-        </div>
-        <div class="flex items-start gap-3">
-          <span class="grid size-9 shrink-0 place-items-center rounded-md bg-white/8 text-sky-200">
-            <MapPin class="size-4" aria-hidden="true" />
-          </span>
-          <div>
-            <p class="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Base</p>
-            <p class="mt-1 text-sm font-semibold text-white">{profile.location[lang]}</p>
-          </div>
-        </div>
-      </aside>
     </div>
-  </section>
-
-  <section class="border-y border-[var(--color-border)] bg-white/[0.03]">
-    <div class="mx-auto grid max-w-6xl gap-5 px-5 py-16 md:grid-cols-2 xl:grid-cols-4">
+    <div class="mx-auto max-w-6xl px-5 py-2">
+      <div class="flex flex-wrap gap-3">
       {content.cards.map((card) => {
         const Icon = cardIcons[card.key] ?? ArrowRight;
+        const buttonStyle = cardButtonStyles[card.key] ?? "border-[var(--color-border)] bg-white/[0.04] text-white hover:border-sky-300/35 hover:bg-white/[0.08]";
+        const iconStyle = cardIconStyles[card.key] ?? "text-sky-200";
         return (
-        <a class="theme-panel focus-ring block p-5 transition hover:-translate-y-1 hover:border-sky-300/35" href={routeMap[card.key][lang]}>
-          <div class="flex items-center justify-between gap-3">
-            <div class="flex min-w-0 items-center gap-3">
-              <span class="grid size-10 shrink-0 place-items-center rounded-md bg-sky-300/12 text-sky-200">
+        <a class={`focus-ring inline-flex items-center gap-3 rounded-md border px-5 py-3 text-sm font-black transition ${buttonStyle}`} href={routeMap[card.key][lang]}>
+              <span class={`grid shrink-0 place-items-center ${iconStyle}`}>
                 <Icon class="size-5" aria-hidden="true" />
               </span>
-              <h2 class="min-w-0 text-xl font-black text-white">{card.title}</h2>
-            </div>
-            <ArrowRight class="size-4 shrink-0 text-slate-500" aria-hidden="true" />
-          </div>
-          <p class="mt-3 leading-7 text-slate-300">{card.description}</p>
+              <span>{card.title}</span>
+              <ArrowRight class={`size-4 shrink-0 ${card.key === "portfolio" || card.key === "cv" ? "text-slate-700" : "text-slate-500"}`} aria-hidden="true" />
         </a>
         );
       })}
+      </div>
+    </div>
+    <div class="mx-auto max-w-6xl px-5 py-6 pb-12">
+      <aside class="grid gap-4 sm:grid-cols-2">
+        <div class="theme-panel p-6">
+          <div class="flex items-start gap-3">
+            <span class="grid size-9 shrink-0 place-items-center rounded-md bg-white/8 text-sky-200">
+              <Mail class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Email</p>
+              <a class="focus-ring mt-1 inline-flex rounded text-sm font-semibold text-white hover:text-sky-200" href={`mailto:${profile.email}`}>
+                {profile.email}
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="theme-panel p-6">
+          <div class="flex items-start gap-3">
+            <span class="grid size-9 shrink-0 place-items-center rounded-md bg-white/8 text-sky-200">
+              <MapPin class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Base</p>
+              <p class="mt-1 text-sm font-semibold text-white">{profile.location[lang]}</p>
+            </div>
+          </div>
+        </div>
+      </aside>
     </div>
   </section>
 </main>

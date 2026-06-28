@@ -10,15 +10,11 @@ const { lang } = Astro.props;
 const filters = [
   { key: "all", label: { en: "All", es: "Todo" } },
   { key: "professional", label: { en: "Professional", es: "Profesional" } },
-  { key: "personal", label: { en: "Personal", es: "Personal" } },
-  { key: "vr", label: { en: "VR", es: "VR" } },
-  { key: "games", label: { en: "Games", es: "Juegos" } },
-  { key: "technical", label: { en: "Technical / Graphics", es: "Técnico / Gráficos" } },
+  { key: "independent", label: { en: "Independent", es: "Independiente" } },
+  { key: "technical", label: { en: "Technical", es: "Técnico" } },
 ];
 
 const detailPath = (slug: string) => (lang === "en" ? `/portfolio/${slug}` : `/es/portfolio/${slug}`);
-const detailCta = lang === "en" ? "View project" : "Ver proyecto";
-const modalCta = lang === "en" ? "Quick view" : "Vista rápida";
 const closeLabel = lang === "en" ? "Close" : "Cerrar";
 const shareLabel = lang === "en" ? "Copy link" : "Copiar enlace";
 const shareCopiedLabel = lang === "en" ? "Copied" : "Copiado";
@@ -26,6 +22,10 @@ const externalLabel = lang === "en" ? "External links" : "Enlaces externos";
 const stackLabel = lang === "en" ? "Stack" : "Stack";
 const contributionLabel = lang === "en" ? "Contribution" : "Contribución";
 const fallbackImageAlt = { en: "Project visual placeholder", es: "Placeholder visual del proyecto" };
+const cardActionLabel = {
+  en: { detail: "Open project", modal: "Open quick view" },
+  es: { detail: "Abrir proyecto", modal: "Abrir vista rápida" },
+};
 const visibleProjects = allPortfolioProjects.filter((project) => !project.hiddenFromPortfolio);
 const modalProjects = visibleProjects.filter((project) => !project.detailEnabled);
 ---
@@ -37,10 +37,10 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
     </div>
   </div>
 
-  <div class="mt-8 flex flex-wrap gap-2" aria-label={lang === "en" ? "Portfolio filters" : "Filtros de portfolio"}>
+  <div class="portfolio-inline-scroll mt-8 flex flex-nowrap gap-2 overflow-x-auto pb-2" aria-label={lang === "en" ? "Portfolio filters" : "Filtros de portfolio"}>
     {filters.map((filter, index) => (
       <button
-        class="portfolio-filter focus-ring rounded-md border border-[var(--color-border)] px-4 py-2 text-sm font-black text-slate-200 transition hover:border-sky-300/50 hover:bg-white/5"
+        class="portfolio-filter focus-ring shrink-0 whitespace-nowrap rounded-md border border-[var(--color-border)] px-3 py-1.5 text-sm font-black text-slate-200 transition hover:border-sky-300/50 hover:bg-white/5"
         type="button"
         data-filter={filter.key}
         data-active={index === 0 ? "true" : "false"}
@@ -52,7 +52,7 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
 
   <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
     {visibleProjects.map((project) => {
-      const categories = [project.group, ...(project.portfolioCategoryTags ?? [])];
+      const categories = project.publicPortfolioCategory ? [project.publicPortfolioCategory] : [];
       const image = project.images?.[0];
       const href = project.detailEnabled && project.detailSlug ? detailPath(project.detailSlug) : undefined;
 
@@ -62,42 +62,48 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
           data-project-card
           data-categories={categories.join(" ")}
         >
-          {image ? (
-            <img class="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-105" src={image.src} alt={image.alt[lang]} loading="lazy" />
+          {href ? (
+            <a
+              class="focus-ring absolute inset-0 z-10 rounded-[inherit]"
+              href={href}
+              aria-label={`${cardActionLabel[lang].detail}: ${project.title}`}
+            >
+              <span class="sr-only">{`${cardActionLabel[lang].detail}: ${project.title}`}</span>
+            </a>
           ) : (
-            <div class="absolute inset-0 grid place-items-center bg-gradient-to-br from-sky-400/35 via-slate-950 to-blue-950">
+            <button
+              class="focus-ring absolute inset-0 z-10 rounded-[inherit]"
+              type="button"
+              data-modal-open={project.id}
+              aria-label={`${cardActionLabel[lang].modal}: ${project.title}`}
+            >
+              <span class="sr-only">{`${cardActionLabel[lang].modal}: ${project.title}`}</span>
+            </button>
+          )}
+          {image ? (
+            <img class="absolute -inset-px size-[calc(100%+2px)] object-cover transition duration-500 group-hover:scale-105" src={image.src} alt={image.alt[lang]} loading="lazy" />
+          ) : (
+            <div class="absolute -inset-px grid place-items-center bg-gradient-to-br from-sky-400/35 via-slate-950 to-blue-950">
               <span class="text-5xl font-black text-white">{project.thumbLabel}</span>
             </div>
           )}
-          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
+          <div class="absolute -inset-px bg-[linear-gradient(to_top,rgba(2,6,23,0.98)_0%,rgba(2,6,23,0.96)_24%,rgba(2,6,23,0.9)_38%,rgba(2,6,23,0.58)_56%,rgba(2,6,23,0.2)_72%,rgba(2,6,23,0)_86%)]"></div>
 
-          <div class="absolute inset-x-0 bottom-0 p-4">
-            <div class="flex items-center justify-between gap-3">
-              <p class="rounded bg-black/55 px-2.5 py-1 text-xs font-black uppercase tracking-wide text-white/80 backdrop-blur">{project.status[lang]}</p>
-              <p class="text-sm font-black text-white/80">{project.year}</p>
+          <div class="pointer-events-none absolute inset-x-0 bottom-0 z-20 p-4">
+            <div class="flex items-start justify-between gap-3">
+              <h3 class="min-w-0 flex-1 text-2xl font-black leading-tight text-white">{project.title}</h3>
+              <p class="shrink-0 rounded-md bg-black/55 px-2.5 py-1 text-sm font-black text-white/90 backdrop-blur">{project.year}</p>
             </div>
-            <h3 class="mt-3 text-2xl font-black leading-tight text-white">{project.title}</h3>
-            <div class="mt-3 flex flex-wrap gap-2">
+            <p class="mt-3 w-full text-[0.95rem] leading-6 text-slate-100/92">
+              {project.cardSummary?.[lang] ?? project.description[lang]}
+            </p>
+            <div class="portfolio-tag-marquee mt-3 overflow-hidden" data-tag-marquee>
+              <div class="portfolio-tag-track flex flex-nowrap gap-1.5" data-tag-track>
               {project.contributionTags.slice(0, 4).map((tag) => (
-                <span class="rounded bg-sky-300/15 px-2 py-1 text-xs font-bold text-sky-50 backdrop-blur">{tag}</span>
+                <span class="shrink-0 whitespace-nowrap rounded bg-sky-300/15 px-1.5 py-0.5 text-[0.8rem] font-bold text-sky-50 backdrop-blur">{tag}</span>
               ))}
+              </div>
             </div>
-          </div>
-
-          <div class="absolute inset-0 grid place-items-center bg-slate-950/55 opacity-0 transition duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
-            {href ? (
-              <a class="focus-ring rounded-md bg-white px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-sky-100" href={href}>
-                {detailCta}
-              </a>
-            ) : (
-              <button
-                class="focus-ring rounded-md bg-white px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-sky-100"
-                type="button"
-                data-modal-open={project.id}
-              >
-                {modalCta}
-              </button>
-            )}
           </div>
         </article>
       );
@@ -168,6 +174,7 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
     teamOrClient: project.teamOrClient,
     type: project.type[lang],
     role: project.roleSummary?.[lang] ?? project.description[lang],
+    summary: project.cardSummary?.[lang] ?? project.description[lang],
     tags: project.contributionTags.slice(0, 5),
     highlights: project.highlights[lang],
     stack: project.stack,
@@ -184,6 +191,7 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
   grids.forEach((grid) => {
     const filterButtons = Array.from(grid.querySelectorAll<HTMLButtonElement>("[data-filter]"));
     const cards = Array.from(grid.querySelectorAll<HTMLElement>("[data-project-card]"));
+    const tagMarquees = Array.from(grid.querySelectorAll<HTMLElement>("[data-tag-marquee]"));
     const modal = grid.querySelector<HTMLElement>("[data-project-modal]");
     const modalDataElement = grid.querySelector<HTMLScriptElement>("[data-project-modal-data]");
     const modalLabelsElement = grid.querySelector<HTMLScriptElement>("[data-project-modal-labels]");
@@ -228,6 +236,38 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
       cards.forEach((card) => {
         const categories = (card.dataset.categories || "").split(" ");
         card.hidden = filter !== "all" && !categories.includes(filter);
+      });
+    };
+
+    const setupTagMarquees = () => {
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      tagMarquees.forEach((marquee) => {
+        const track = marquee.querySelector<HTMLElement>("[data-tag-track]");
+        if (!track) return;
+
+        track.classList.remove("is-animating");
+        marquee.classList.remove("is-animating");
+        track.style.removeProperty("--marquee-distance");
+        track.querySelectorAll("[data-marquee-clone]").forEach((clone) => clone.remove());
+
+        if (reduceMotion) return;
+
+        const contentWidth = track.scrollWidth;
+        const containerWidth = marquee.clientWidth;
+        if (contentWidth <= containerWidth + 1) return;
+
+        const gap = Number.parseFloat(window.getComputedStyle(track).columnGap || "0");
+        Array.from(track.children).forEach((item) => {
+          const clone = item.cloneNode(true) as HTMLElement;
+          clone.dataset.marqueeClone = "true";
+          clone.setAttribute("aria-hidden", "true");
+          track.appendChild(clone);
+        });
+
+        track.style.setProperty("--marquee-distance", `${contentWidth + gap}px`);
+        track.classList.add("is-animating");
+        marquee.classList.add("is-animating");
       });
     };
 
@@ -307,7 +347,7 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
       modal.querySelector("[data-modal-status]")!.textContent = project.status;
       modal.querySelector("[data-modal-meta]")!.textContent = `${project.year} · ${project.type} · ${project.engine}`;
       modal.querySelector("[data-modal-title]")!.textContent = project.title;
-      modal.querySelector("[data-modal-role]")!.textContent = project.role;
+      modal.querySelector("[data-modal-role]")!.textContent = project.role || project.summary;
       modal.querySelector("[data-modal-thumb]")!.textContent = project.thumbLabel;
       if (shareButton) shareButton.textContent = labels.shareLabel || "Copy link";
       renderModalImage();
@@ -354,6 +394,12 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
       button.addEventListener("click", () => setFilter(button.dataset.filter || "all"));
     });
 
+    let marqueeResizeFrame = 0;
+    const queueTagMarqueeSetup = () => {
+      window.cancelAnimationFrame(marqueeResizeFrame);
+      marqueeResizeFrame = window.requestAnimationFrame(setupTagMarquees);
+    };
+
     grid.querySelectorAll<HTMLButtonElement>("[data-modal-open]").forEach((button) => {
       button.addEventListener("click", () => openModal(button.dataset.modalOpen || "", button));
     });
@@ -399,5 +445,7 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
 
     const initialProjectId = getUrlProjectId();
     if (initialProjectId) openModal(initialProjectId, undefined, { updateUrl: false });
+    setupTagMarquees();
+    window.addEventListener("resize", queueTagMarqueeSetup);
   });
 </script>

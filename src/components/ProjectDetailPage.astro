@@ -39,7 +39,7 @@ const facts = [
       </a>
       <p class="text-sm font-black uppercase tracking-wide text-[var(--color-secondary)]">{project.status[lang]}</p>
       <h1 class="mt-4 max-w-4xl text-5xl font-black leading-tight text-white sm:text-6xl">{project.title}</h1>
-      <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-200">{project.description[lang]}</p>
+      <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-200">{project.cardSummary?.[lang] ?? project.description[lang]}</p>
     </div>
   </section>
 
