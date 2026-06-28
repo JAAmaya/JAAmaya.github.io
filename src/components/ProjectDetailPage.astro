@@ -1,9 +1,12 @@
 ---
+import { Picture, getImage } from "astro:assets";
+
 import Footer from "@/components/Footer.astro";
 import Header from "@/components/Header.astro";
-import type { Lang, Project } from "@/data/site";
+import type { Lang } from "@/data/site";
+import type { ProjectWithImages } from "@/data/siteImages";
 
-type ProjectWithGroup = Project & { group: "professional" | "personal" };
+type ProjectWithGroup = ProjectWithImages & { group: "professional" | "personal" };
 
 interface Props {
   project: ProjectWithGroup;
@@ -14,6 +17,24 @@ const { project, lang } = Astro.props;
 const backHref = lang === "en" ? "/portfolio" : "/es/portfolio";
 const heroImage = project.images?.[0];
 const galleryImages = project.images ?? [];
+const lightboxImages = await Promise.all(
+  galleryImages.map(async (image) => {
+    const optimized = await getImage({
+      src: image.src,
+      format: "webp",
+      widths: [900, 1400, 1800],
+      sizes: "88vw",
+    });
+
+    return {
+      src: optimized.src,
+      srcset: optimized.srcSet.attribute,
+      width: optimized.attributes.width,
+      height: optimized.attributes.height,
+      alt: image.alt[lang],
+    };
+  }),
+);
 const facts = [
   { label: lang === "en" ? "Year" : "Año", value: project.year },
   { label: lang === "en" ? "Role" : "Rol", value: project.detailRole?.[lang] ?? project.context[lang] },
@@ -28,7 +49,19 @@ const facts = [
 <main>
   <section class="relative min-h-[72vh] overflow-hidden">
     {heroImage ? (
-      <img class="absolute inset-0 size-full object-cover" src={heroImage.src} alt={heroImage.alt[lang]} />
+      <Picture
+        pictureAttributes={{ class: "absolute inset-0 block size-full overflow-hidden" }}
+        class="size-full object-cover"
+        src={heroImage.src}
+        alt={heroImage.alt[lang]}
+        formats={["avif", "webp"]}
+        fallbackFormat={heroImage.src.format === "png" ? "png" : "jpg"}
+        widths={[768, 1280, 1600, 1920]}
+        sizes="100vw"
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+      />
     ) : (
       <div class="absolute inset-0 bg-gradient-to-br from-sky-400/30 via-slate-950 to-blue-950"></div>
     )}
@@ -51,7 +84,18 @@ const facts = [
           <div class="mt-6 grid gap-4 sm:grid-cols-2">
             {galleryImages.map((image, index) => (
               <button class="focus-ring overflow-hidden rounded-lg border border-[var(--color-border)] text-left transition hover:border-sky-300/60" type="button" data-lightbox-open={index}>
-                <img class="aspect-video w-full object-cover transition duration-300 hover:scale-105" src={image.src} alt={image.alt[lang]} loading="lazy" />
+                <Picture
+                  pictureAttributes={{ class: "block overflow-hidden" }}
+                  class="aspect-video w-full object-cover transition duration-300 hover:scale-105"
+                  src={image.src}
+                  alt={image.alt[lang]}
+                  formats={["webp"]}
+                  fallbackFormat={image.src.format === "png" ? "png" : "jpg"}
+                  widths={[480, 720, 960]}
+                  sizes="(min-width: 640px) 50vw, 100vw"
+                  loading="lazy"
+                  decoding="async"
+                />
               </button>
             ))}
           </div>
@@ -127,7 +171,7 @@ const facts = [
     <p class="absolute bottom-4 left-4 right-4 text-center text-sm font-semibold text-slate-300" data-lightbox-caption></p>
   </div>
 
-  <script is:inline type="application/json" data-lightbox-data set:html={JSON.stringify(galleryImages.map((image) => ({ src: image.src, alt: image.alt[lang] })))} />
+  <script is:inline type="application/json" data-lightbox-data set:html={JSON.stringify(lightboxImages)} />
 </main>
 <Footer lang={lang} />
 
@@ -144,7 +188,11 @@ const facts = [
     const image = lightboxImages[lightboxIndex];
     if (!image || !lightboxImage || !lightboxCaption) return;
     lightboxImage.src = image.src;
+    lightboxImage.srcset = image.srcset || "";
+    lightboxImage.sizes = "88vw";
     lightboxImage.alt = image.alt;
+    if (image.width) lightboxImage.width = image.width;
+    if (image.height) lightboxImage.height = image.height;
     lightboxCaption.textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`;
   };
 

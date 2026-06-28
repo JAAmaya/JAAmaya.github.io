@@ -1,7 +1,8 @@
 ---
 import ProjectDetailPage from "@/components/ProjectDetailPage.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { detailPortfolioProjects, profile } from "@/data/site";
+import { profile } from "@/data/site";
+import { detailPortfolioProjects } from "@/data/siteImages";
 
 export function getStaticPaths() {
   return detailPortfolioProjects.map((project) => ({

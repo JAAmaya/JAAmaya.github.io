@@ -1,5 +1,8 @@
 ﻿---
-import { allPortfolioProjects, type Lang } from "@/data/site";
+import { Picture, getImage } from "astro:assets";
+
+import type { Lang } from "@/data/site";
+import { allPortfolioProjects } from "@/data/siteImages";
 
 interface Props {
   lang: Lang;
@@ -27,7 +30,31 @@ const cardActionLabel = {
   es: { detail: "Abrir proyecto", modal: "Abrir vista rápida" },
 };
 const visibleProjects = allPortfolioProjects.filter((project) => !project.hiddenFromPortfolio);
-const modalProjects = visibleProjects.filter((project) => !project.detailEnabled);
+const modalProjects = await Promise.all(
+  visibleProjects
+    .filter((project) => !project.detailEnabled)
+    .map(async (project) => ({
+      ...project,
+      optimizedImages: await Promise.all(
+        (project.images ?? []).map(async (image) => {
+          const optimized = await getImage({
+            src: image.src,
+            format: "webp",
+            widths: [720, 1080, 1440],
+            sizes: "92vw",
+          });
+
+          return {
+            src: optimized.src,
+            srcset: optimized.srcSet.attribute,
+            width: optimized.attributes.width,
+            height: optimized.attributes.height,
+            alt: image.alt[lang],
+          };
+        }),
+      ),
+    })),
+);
 ---
 
 <section class="py-16" data-portfolio-grid>
@@ -81,7 +108,18 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
             </button>
           )}
           {image ? (
-            <img class="absolute -inset-px size-[calc(100%+2px)] object-cover transition duration-500 group-hover:scale-105" src={image.src} alt={image.alt[lang]} loading="lazy" />
+            <Picture
+              pictureAttributes={{ class: "absolute -inset-px block size-[calc(100%+2px)] overflow-hidden" }}
+              class="size-full object-cover transition duration-500 group-hover:scale-105"
+              src={image.src}
+              alt={image.alt[lang]}
+              formats={["webp"]}
+              fallbackFormat={image.src.format === "png" ? "png" : "jpg"}
+              widths={[360, 540, 720]}
+              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+              loading="lazy"
+              decoding="async"
+            />
           ) : (
             <div class="absolute -inset-px grid place-items-center bg-gradient-to-br from-sky-400/35 via-slate-950 to-blue-950">
               <span class="text-5xl font-black text-white">{project.thumbLabel}</span>
@@ -179,7 +217,7 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
     highlights: project.highlights[lang],
     stack: project.stack,
     links: project.links.filter((link) => link.href),
-    images: project.images?.map((image) => ({ src: image.src, alt: image.alt[lang] })) ?? [],
+    images: project.optimizedImages,
     thumbLabel: project.thumbLabel,
   })))} />
   <script is:inline type="application/json" data-project-modal-labels set:html={JSON.stringify({ shareLabel, shareCopiedLabel })} />
@@ -309,7 +347,11 @@ const modalProjects = visibleProjects.filter((project) => !project.detailEnabled
         if (images.length) {
           const current = images[activeModalImageIndex];
           image.src = current.src;
+          image.srcset = current.srcset || "";
+          image.sizes = "92vw";
           image.alt = current.alt;
+          if (current.width) image.width = current.width;
+          if (current.height) image.height = current.height;
           imageButton.classList.remove("hidden");
           fallback.classList.add("hidden");
         } else {
